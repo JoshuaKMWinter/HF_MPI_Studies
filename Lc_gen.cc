@@ -18,7 +18,7 @@ int main() {
 	const int d4_id = 211;
 
 	std::ofstream datafile; datafile.open("Lc_EventData.csv");
-	datafile << "cLO_pT,cLO_phi,cLO_eta,c_pT,c_phi,c_eta,chad_pT,cmes_phi,chad_eta,cbarLO_pT,cbarLO_phi,cbarLO_eta,cbar_pT,cbar_phi,cbar_eta,cbarmes_pT,cbarhad_phi,cbarhad_eta,d1_pT,d1_phi,d1_eta,d1bar_pT,d1bar_phi,d1bar_eta,d2_pT,d2_phi,d2_eta,d2bar_pT,d2bar_phi,d2bar_eta,d3_pT,d3_phi,d3_eta,d3bar_pT,d3bar_phi,d3bar_eta,d4_pT,d4_phi,d4_eta,d4bar_pT,d4bar_phi,d4bar_eta,multiplicity,chad_cone_mult,chad_ptcone,cbarhad_cone_mult_cbarhad_ptcone\n";
+	datafile << "cLO_pT,cLO_phi,cLO_eta,c_pT,c_phi,c_eta,chad_pT,chad_phi,chad_eta,cbarLO_pT,cbarLO_phi,cbarLO_eta,cbar_pT,cbar_phi,cbar_eta,cbarhad_pT,cbarhad_phi,cbarhad_eta,d1_pT,d1_phi,d1_eta,d1bar_pT,d1bar_phi,d1bar_eta,d2_pT,d2_phi,d2_eta,d2bar_pT,d2bar_phi,d2bar_eta,d3_pT,d3_phi,d3_eta,d3bar_pT,d3bar_phi,d3bar_eta,d4_pT,d4_phi,d4_eta,d4bar_pT,d4bar_phi,d4bar_eta,multiplicity,chad_cone_mult,chad_ptcone,cbarhad_cone_mult,cbarhad_ptcone\n";
 
 	//Set-up event properties
 	Pythia pythia;
@@ -27,11 +27,13 @@ int main() {
 	pythia.readString("4122:onMode = off");        //Turn off decay modes for selected charmed hadron
 	pythia.readString("4122:onIfMatch = 311 2212"); //Selected desired decays for charmed hadron
 	pythia.readString("311:onMode = off");
-	pythia.readString("311:onIfMatch = 211 211");
+	pythia.readString("311:onIfMatch = 310"); //force K0 -> K0_S -> pi+ pi- decay
+	pythia.readString("310:onMode = off");
+	pythia.readString("310:onIfMatch = 211 211");
 	pythia.init();
 	
 	// Begin event loop. Generate event. Skip if error. List first one.
-	for (int iEvent = 0; iEvent < 1000; ++iEvent) { 
+	for (int iEvent = 0; iEvent < 200000; ++iEvent) { 
 		if (!pythia.next()) continue;
 		//if(iEvent == 419) pythia.event.list();
 
@@ -49,6 +51,8 @@ int main() {
 		int chad_ind = -1, cbarhad_ind = -1, cmid_ind = -1, cbarmid_ind = -1; //integers to track charm hadron index
 		int mult = 0, chad_cone_mult = 0, cbarhad_cone_mult = 0; //multiplicity counters.
 		
+		int KS0_ind = -1, KS0bar_ind = -1;
+
 		for (int i = 0; i < pythia.event.size(); ++i) {
 			
 			//use all final particles as an estimate of multiplicity
@@ -116,31 +120,35 @@ int main() {
 				d2bar_eta = pythia.event[i].eta();
 				n_d2bar++;
 			}
-			if (id == d3_id && (mother1 == cmid_ind || mother2 == cmid_ind)) {
+			if (id == 310 && mother1 == cmid_ind) {KS0_ind = i;}
+			if (id == 310 && mother1 == cbarmid_ind) {KS0bar_ind = i;}
+		
+			if (id == d3_id && (mother1 == KS0_ind || mother2 == KS0_ind)) {
 				d3_pt  = pythia.event[i].pT();
 				d3_phi = pythia.event[i].phi();
 				d3_eta = pythia.event[i].eta();
 			}
-			if (id == -d3_id && (mother1 == cmid_ind || mother2 == cmid_ind)) {
+			if (id == -d3_id && (mother1 == KS0_ind || mother2 == KS0_ind)) {
 				d3bar_pt  = pythia.event[i].pT();
 				d3bar_phi = pythia.event[i].phi();
 				d3bar_eta = pythia.event[i].eta();
 			}
-			if (id == d4_id && (mother1 == cbarmid_ind || mother2 == cbarmid_ind)) {
+			if (id == d4_id && (mother1 == KS0bar_ind || mother2 ==KS0bar_ind)) {
 				d4_pt  = pythia.event[i].pT();
 				d4_phi = pythia.event[i].phi();
 				d4_eta = pythia.event[i].eta();
 			}
-			if (id == -d4_id && (mother1 == cbarmid_ind || mother2 == cbarmid_ind)) {
+			if (id == -d4_id && (mother1 == KS0bar_ind || mother2 == KS0bar_ind)) {
 				d4bar_pt  = pythia.event[i].pT();
 				d4bar_phi = pythia.event[i].phi();
 				d4bar_eta = pythia.event[i].eta();
 			}
+						
 		}
 	
 		//choose only events with 1 of each particle, as generation will ensure correct matching
-		if (n_chad == 1 && n_cbarhad == 1 && n_c == 1 && n_cbar == 1 && n_d1 == 1 && n_d1bar == 1 && n_d2 == 1 && n_d2bar == 1) {
-			pythia.event.list();
+		if (n_chad == 1 && n_cbarhad == 1 && n_c == 1 && n_cbar == 1 && n_d1 == 1 && n_d1bar == 1 && n_d2 == 1 && n_d2bar == 1 /*&& n_d3 == 1 && n_d3bar == 1 && n_d4 == 1 && n_d4bar == 1*/) {
+			//pythia.event.list();
 
 			chad_pt  = pythia.event[chad_ind].pT();  cbarhad_pt  = pythia.event[cbarhad_ind].pT();
 			chad_phi = pythia.event[chad_ind].phi(); cbarhad_phi = pythia.event[cbarhad_ind].phi();
