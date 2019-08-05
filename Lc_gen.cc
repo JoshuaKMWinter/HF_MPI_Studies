@@ -17,7 +17,7 @@ int main() {
 	const int d3_id = 211;
 	const int d4_id = 211;
 
-	std::ofstream datafile; datafile.open("Lc_EventData.csv");
+	std::ofstream datafile; datafile.open("Lc_EventData_ptmin4.csv");
 	datafile << "cLO_pT,cLO_phi,cLO_eta,c_pT,c_phi,c_eta,chad_pT,chad_phi,chad_eta,cbarLO_pT,cbarLO_phi,cbarLO_eta,cbar_pT,cbar_phi,cbar_eta,cbarhad_pT,cbarhad_phi,cbarhad_eta,d1_pT,d1_phi,d1_eta,d1bar_pT,d1bar_phi,d1bar_eta,d2_pT,d2_phi,d2_eta,d2bar_pT,d2bar_phi,d2bar_eta,d3_pT,d3_phi,d3_eta,d3bar_pT,d3bar_phi,d3bar_eta,d4_pT,d4_phi,d4_eta,d4bar_pT,d4bar_phi,d4bar_eta,multiplicity,chad_cone_mult,chad_ptcone,cbarhad_cone_mult,cbarhad_ptcone\n";
 
 	//Set-up event properties
@@ -30,10 +30,11 @@ int main() {
 	pythia.readString("311:onIfMatch = 310"); //force K0 -> K0_S -> pi+ pi- decay
 	pythia.readString("310:onMode = off");
 	pythia.readString("310:onIfMatch = 211 211");
+	pythia.readString("PhaseSpace:pTHatMin = 4.");
 	pythia.init();
 	
 	// Begin event loop. Generate event. Skip if error. List first one.
-	for (int iEvent = 0; iEvent < 200000; ++iEvent) { 
+	for (int iEvent = 0; iEvent < 500000; ++iEvent) { 
 		if (!pythia.next()) continue;
 		//if(iEvent == 419) pythia.event.list();
 

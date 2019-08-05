@@ -1,5 +1,6 @@
-//charmdecays.cc
-//Example code for generation of ccbar pairs.
+//Ds_gen.cc
+//Code for generation of ccbar pairs, with selection of events based on the confinement of c-quarks in Ds mesons
+//Following Ds+ > pi+ phi, phi > K+ K- and complex conjugate for cbar.
 
 #include "Pythia8/Pythia.h"
 #include <iostream>
@@ -11,13 +12,13 @@ using namespace Pythia8;
 
 int main() {
 
-	const int chadron_id = 431; //PDG ID of charm meson for selected decay
-	const int d1_id = 211;     //Decay product ids
-	const int d2_id = 333;
-	const int d3_id = 321;
-	const int d4_id = 321;
+	const int chadron_id = 431; 	//PDG ID of charm meson for selected decay
+	const int d1_id = 211;		//Decay product ids. pi+
+	const int d2_id = 333;		//phi0
+	const int d3_id = 321;		//K+
+	const int d4_id = 321;		//K+
 
-	std::ofstream datafile; datafile.open("Ds_EventData.csv");
+	std::ofstream datafile; datafile.open("Ds_EventData_ptmin4.csv");
 	datafile << "cLO_pT,cLO_phi,cLO_eta,c_pT,c_phi,c_eta,chad_pT,chad_phi,chad_eta,cbarLO_pT,cbarLO_phi,cbarLO_eta,cbar_pT,cbar_phi,cbar_eta,cbarhad_pT,cbarhad_phi,cbarhad_eta,d1_pT,d1_phi,d1_eta,d1bar_pT,d1bar_phi,d1bar_eta,d2_pT,d2_phi,d2_eta,d2bar_pT,d2bar_phi,d2bar_eta,d3_pT,d3_phi,d3_eta,d3bar_pT,d3bar_phi,d3bar_eta,d4_pT,d4_phi,d4_eta,d4bar_pT,d4bar_phi,d4bar_eta,multiplicity,chad_cone_mult,chad_ptcone,cbarhad_cone_mult,cbarhad_ptcone\n";
 
 	//Set-up event properties
@@ -27,11 +28,12 @@ int main() {
 	pythia.readString("431:onMode = off");        //Turn off decay modes for selected charmed hadron
 	pythia.readString("431:onIfMatch = 211 333"); //Selected desired decays for charmed hadron
 	pythia.readString("333:onMode = off");
-	pythia.readString("333:onIfMatch = 321 321");
+	pythia.readString("333:onIfMatch = 321 321"); //Force phi > K+ K- decay
+	pythia.readString("PhaseSpace:pTHatMin = 4.");
 	pythia.init();
 	
 	// Begin event loop. Generate event. Skip if error. List first one.
-	for (int iEvent = 0; iEvent < 200000; ++iEvent) { 
+	for (int iEvent = 0; iEvent < 400000; ++iEvent) { 
 		if (!pythia.next()) continue;
 		//if(iEvent == 419) pythia.event.list();
 
@@ -89,18 +91,21 @@ int main() {
 			if (id ==  chadron_id) { n_chad++; chad_ind = i;}
 			if (id == -chadron_id) { n_cbarhad++; cbarhad_ind = i;}
 			
+			//d1 = pi+
 			if (id == d1_id && (mother1 == chad_ind || mother2 == chad_ind)) {
 				d1_pt  = pythia.event[i].pT();
 				d1_phi = pythia.event[i].phi();
 				d1_eta = pythia.event[i].eta();
 				n_d1++;
 			}
+			//d1bar = pi-
 			if (id == -d1_id && (mother1 == cbarhad_ind || mother2 == cbarhad_ind)) {
 				d1bar_pt  = pythia.event[i].pT();
 				d1bar_phi = pythia.event[i].phi();
 				d1bar_eta = pythia.event[i].eta();
 				n_d1bar++;
 			}
+			//d2 = phi from Ds+
 			if (id == d2_id && (mother1 == chad_ind || mother2 == chad_ind)) { 
 				cphi_ind = i;
 				d2_pt  = pythia.event[i].pT();
@@ -109,6 +114,7 @@ int main() {
 				n_d2++;
 
 			}
+			//d2bar = phi from Ds-
 			if (id == d2_id && (mother1 == cbarhad_ind || mother2 == cbarhad_ind)) { 
 				cbarphi_ind = i;
 				d2bar_pt  = pythia.event[i].pT();
@@ -116,21 +122,25 @@ int main() {
 				d2bar_eta = pythia.event[i].eta();
 				n_d2bar++;
 			}
+			//d3 = K+ from d2
 			if (id == d3_id && (mother1 == cphi_ind || mother2 == cphi_ind)) {
 				d3_pt  = pythia.event[i].pT();
 				d3_phi = pythia.event[i].phi();
 				d3_eta = pythia.event[i].eta();
 			}
+			//d3bar = K- from d2
 			if (id == -d3_id && (mother1 == cphi_ind || mother2 == cphi_ind)) {
 				d3bar_pt  = pythia.event[i].pT();
 				d3bar_phi = pythia.event[i].phi();
 				d3bar_eta = pythia.event[i].eta();
 			}
+			//d4 = K+ from d2bar
 			if (id == d4_id && (mother1 == cbarphi_ind || mother2 == cbarphi_ind)) {
 				d4_pt  = pythia.event[i].pT();
 				d4_phi = pythia.event[i].phi();
 				d4_eta = pythia.event[i].eta();
 			}
+			//d4bar = K- from d3bar
 			if (id == -d4_id && (mother1 == cbarphi_ind || mother2 == cbarphi_ind)) {
 				d4bar_pt  = pythia.event[i].pT();
 				d4bar_phi = pythia.event[i].phi();
