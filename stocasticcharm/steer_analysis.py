@@ -27,7 +27,7 @@ from analyzer import Analyzer
 def steer_analysis(case):
 
     with open("data/database.yml", 'r') as datafile:
-        data_param = yaml.load(datafile, Loader=yaml.FullLoader)
+        data_param = yaml.load(datafile)
 
     myan = Analyzer(data_param[case], case)
     do_distributions = True
@@ -35,3 +35,5 @@ def steer_analysis(case):
         myan.plot()
 
 steer_analysis("Ds")
+steer_analysis("D0")
+steer_analysis("Lc")
