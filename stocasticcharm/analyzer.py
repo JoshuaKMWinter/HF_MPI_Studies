@@ -114,4 +114,6 @@ class Analyzer:
                 histlist[ihist+1].Draw("SAME")
             legend.Draw()
             c.SaveAs("plots/%s/c_%s_%s.eps" % (self.case, self.case, self.var_1d_distr[index][0]))
-
+            #Create an ouputfile "outputDs.root"
+            #save inside all the relevant histograms
+            #close the file
