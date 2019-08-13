@@ -18,25 +18,72 @@ from array import *
 import pandas as pd
 import pickle
 from root_numpy import fill_hist
-from ROOT import TFile, TH1F, TCanvas
+from ROOT import TFile, TObject, TList, TClass, TKey, TTree, TTreeReader, TH1F, TCanvas
 from ROOT import gStyle, TLegend
 from ROOT import gROOT
 from ROOT import TStyle
 import numpy as np
-
+import copy
 
 # pylint: disable=too-few-public-methods, too-many-instance-attributes, too-many-statements
+
+def Find_Hist_Max(histlist, scaled = False):
+    hmax = 0
+    for i in range(len(histlist)):
+        norm = histlist[i].GetEntries()
+        normmax = histlist[i].GetMaximum() / norm;
+        if normmax > hmax : hmax = normmax
+    return hmax
+
 class Plotter:
     species = "analyzer"
-    def __init__(self, datap, case):
+    def __init__(self):
         self.cases = ["D0", "Ds", "Lc"]
 
-    def plotptspectrum(self):
+    def get_num_objects(self, infile, objclass):
+        n_obj = 0
+        for key in infile.GetListOfKeys():
+            tclass = gROOT.GetClass(key.GetClassName())
+            if (tclass.InheritsFrom(objclass)): n_obj+=1
+        return n_obj
+
+    def get_objects(self, infile, objclass):
+        objarray = []
+        for key in infile.GetListOfKeys():
+            tclass = gROOT.GetClass(key.GetClassName())
+            if (tclass.InheritsFrom(objclass)):
+                obj = key.ReadObj()
+                objarray.append(obj)
+        return objarray
+
+    def plotcomparison(self):
         print("Running plotter")
-        # create a canvas
-        for case in self.cases:
-            # load files for each of the meson
-            # extract the relevant histogram
-            # Draw histograms for each meson one on top on the others
-            #add legend
-        #save plot to file
+        tempfile = TFile.Open("data/"+self.cases[0]+"_hists.root")
+        histlist = [ [] for i in range(len(self.cases))]
+        colours = [4,2,1]
+
+        for i in range(len(self.cases)):
+            infile = TFile.Open("data/" + self.cases[i] + "_hists.root")
+            caselist = self.get_objects(infile, "TH1")
+            histlist[i] = copy.deepcopy(caselist)
+            infile.Close()
+        for icanv in range(len(histlist[0])):
+            c = TCanvas("c_"+histlist[0][icanv].GetName())
+            leg = TLegend(.87,.6,.98,.75)
+            temparr = []
+            for i in range(len(histlist)):
+                temparr.append(histlist[i][icanv])
+            hmax = Find_Hist_Max(temparr)
+            for i in range(len(histlist)):
+                histlist[i][icanv].SetLineColor(colours[i])
+                norm = histlist[i][icanv].GetEntries()
+                histlist[i][icanv].Scale(1./norm)
+                leg.AddEntry(histlist[i][icanv], self.cases[i])
+                if i==0 : 
+                    histlist[i][icanv].SetMaximum(hmax*1.2)
+                    histlist[i][icanv].Draw()
+                else: histlist[i][icanv].Draw("same")
+            leg.Draw()
+            c.SaveAs("plots/Comparison/%s.eps" % histlist[0][icanv].GetName())
+        
+

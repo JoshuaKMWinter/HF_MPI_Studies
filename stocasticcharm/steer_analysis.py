@@ -23,6 +23,7 @@ from os.path import exists
 import yaml
 from pkg_resources import resource_stream
 from analyzer import Analyzer
+from plotter import Plotter
 
 def steer_analysis(case):
 
@@ -30,10 +31,14 @@ def steer_analysis(case):
         data_param = yaml.load(datafile)
 
     myan = Analyzer(data_param[case], case)
-    do_distributions = True
+    do_distributions = False
     if do_distributions is True:
         myan.plot()
+    #if case == "Ds" or "Lc": myan.hadron_ptratio()
 
 steer_analysis("Ds")
 steer_analysis("D0")
 steer_analysis("Lc")
+myplotter = Plotter()
+myplotter.plotcomparison()
+

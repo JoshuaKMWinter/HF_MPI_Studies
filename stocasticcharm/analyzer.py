@@ -45,6 +45,7 @@ class Analyzer:
     def __init__(self, datap, case):
         self.case = case
         self.mass = datap["mass"]
+        self.pdg = datap["pdg"]
         self.rapiditymax = datap["rapiditymax"]
         self.rapiditymin = datap["rapiditymin"]
         self.var_all = datap["variables"]["var_all"]
@@ -86,6 +87,9 @@ class Analyzer:
 
     def plot(self):
         print("Running plotter")
+       
+        outfile = TFile("data/" + self.case + "_hists.root", "RECREATE")
+       
         dfsel = self.dfm.query(self.sel_1d_ptchad)
         
         for index in range(self.n_1d):    
@@ -102,6 +106,7 @@ class Analyzer:
                 hist.SetLineColor(self.colours[i])
                 fill_hist(hist, dfsel[self.var_1d_distr[index][i]])
                 histlist.append(hist)
+                hist.Write()
                 legend.AddEntry(hist, self.leg_1d_distr[index][i])
             hmax = Find_Hist_Max(histlist) 
             if self.logy_1d_distr[index] :
@@ -114,6 +119,21 @@ class Analyzer:
                 histlist[ihist+1].Draw("SAME")
             legend.Draw()
             c.SaveAs("plots/%s/c_%s_%s.eps" % (self.case, self.case, self.var_1d_distr[index][0]))
-            #Create an ouputfile "outputDs.root"
-            #save inside all the relevant histograms
-            #close the file
+        outfile.Close()
+
+    def hadron_ptratio(self):
+        self.df = pd.read_csv("../input/pThad_Data.csv")
+
+        multbins = [self.df['multiplicity']<100, self.df['multiplicity']>=100 and self.df['multiplicity']<300, self.df['multiplicity']>=300]
+
+        dfD0 = self.df.query(hadron_pdg == 421)
+        df_chad = self.df.query(hadron_pdg == self.pdg)
+        
+        D0_pt = [[],[],[]]
+        chad_pt = [[],[],[]]
+
+        for i in range(len(multbins)):
+            D0_pt[i] = [x for x in dfD0['pt_had'] if multbins[i]]
+            chad_pt[i] = [x for x in df_chad['pt_had'] if multbins[i]]
+        
+        print(D0_pt)
