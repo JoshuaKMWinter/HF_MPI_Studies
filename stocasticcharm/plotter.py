@@ -18,7 +18,7 @@ from array import *
 import pandas as pd
 import pickle
 from root_numpy import fill_hist
-from ROOT import TFile, TObject, TList, TClass, TKey, TTree, TTreeReader, TH1F, TCanvas
+from ROOT import TFile, TObject, TList, TClass, TKey, TTree, TTreeReader, TH1F, TCanvas, TAxis
 from ROOT import gStyle, TLegend
 from ROOT import gROOT
 from ROOT import TStyle
@@ -39,6 +39,7 @@ class Plotter:
     species = "analyzer"
     def __init__(self):
         self.cases = ["D0", "Ds", "Lc"]
+        self.colours = [4,2,1]
 
     def get_num_objects(self, infile, objclass):
         n_obj = 0
@@ -57,10 +58,9 @@ class Plotter:
         return objarray
 
     def plotcomparison(self):
-        print("Running plotter")
+        print("Running comparison plotter")
         tempfile = TFile.Open("data/"+self.cases[0]+"_hists.root")
         histlist = [ [] for i in range(len(self.cases))]
-        colours = [4,2,1]
 
         for i in range(len(self.cases)):
             infile = TFile.Open("data/" + self.cases[i] + "_hists.root")
@@ -68,19 +68,21 @@ class Plotter:
             histlist[i] = copy.deepcopy(caselist)
             infile.Close()
         for icanv in range(len(histlist[0])):
-            c = TCanvas("c_"+histlist[0][icanv].GetName())
-            leg = TLegend(.87,.6,.98,.75)
+            c = TCanvas("c_"+histlist[0][icanv].GetName(),'',600,600)
+            leg = TLegend(.7,.75,.9,.9)
             temparr = []
             for i in range(len(histlist)):
                 temparr.append(histlist[i][icanv])
             hmax = Find_Hist_Max(temparr)
             for i in range(len(histlist)):
-                histlist[i][icanv].SetLineColor(colours[i])
+                histlist[i][icanv].SetLineColor(self.colours[i])
+                histlist[i][icanv].SetTitle(histlist[i][icanv].GetTitle()[4:])
+                histlist[i][icanv].SetYTitle(histlist[i][icanv].GetYaxis().GetTitle() + " (normalised)")
                 norm = histlist[i][icanv].GetEntries()
                 histlist[i][icanv].Scale(1./norm)
                 leg.AddEntry(histlist[i][icanv], self.cases[i])
                 if i==0 : 
-                    histlist[i][icanv].SetMaximum(hmax*1.2)
+                    histlist[i][icanv].SetMaximum(hmax*1.3)
                     histlist[i][icanv].Draw()
                 else: histlist[i][icanv].Draw("same")
             leg.Draw()

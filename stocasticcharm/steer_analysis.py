@@ -26,19 +26,18 @@ from analyzer import Analyzer
 from plotter import Plotter
 
 def steer_analysis(case):
-
     with open("data/database.yml", 'r') as datafile:
         data_param = yaml.load(datafile)
-
     myan = Analyzer(data_param[case], case)
-    do_distributions = False
+    do_distributions = True
     if do_distributions is True:
         myan.plot()
-    #if case == "Ds" or "Lc": myan.hadron_ptratio()
+        myan.hadron_ptratio()
+        myan.hadron_multiratio()
+        myan.plot_tunes()
 
 steer_analysis("Ds")
 steer_analysis("D0")
 steer_analysis("Lc")
-myplotter = Plotter()
-myplotter.plotcomparison()
-
+#myplotter = Plotter()
+#myplotter.plotcomparison()

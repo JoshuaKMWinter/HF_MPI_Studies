@@ -7,22 +7,40 @@
 
 using namespace Pythia8;
 
-int main() {
+int main(int argc, char* argv[]) {
 
 	const int chadron_id = 421; 	//PDG ID of charm meson for selected decay
 	const int d1_id = 211;		//Decay product ids. pi+
 	const int d2_id = 321;		//K+
 
-	//outfile for selected event kinematic analysis
-	std::ofstream datafile; datafile.open("CSVs/D0_EventData.csv");
-	datafile << "cLO_pT,cLO_phi,cLO_eta,c_pT,c_phi,c_eta,chad_pT,chad_phi,chad_eta,cbarLO_pT,cbarLO_phi,cbarLO_eta,cbar_pT,cbar_phi,cbar_eta,cbarhad_pT,cbarhad_phi,cbarhad_eta,d1_pT,d1_phi,d1_eta,d1bar_pT,d1bar_phi,d1bar_eta,d2_pT,d2_phi,d2_eta,d2bar_pT,d2bar_phi,d2bar_eta,multiplicity,chad_cone_mult,chad_ptcone,cbarhad_cone_mult,cbarhad_ptcone\n";
+	char* outfile;
 	
+	if (argc == 0) outfile = (char*)"CSVs/D0_EventData.csv";
+	else if (argc !=3) {cout<<"Wrong number of arguments. One output file and on pythia tune expected. Program stopped."<<endl; return(1);}
+	else {
+		outfile = argv[1];
+		ifstream is(argv[2]);
+		if (!is) {cout<<"Pythia tune not found! Program stopped."; return(1);}
+	}
+
+	//outfile for selected event kinematic analysis
+	std::ofstream datafile; datafile.open(outfile);
+	datafile << "cLO_pT,cLO_phi,cLO_eta,c_pT,c_phi,c_eta,chad_pT,chad_phi,chad_eta,cbarLO_pT,cbarLO_phi,cbarLO_eta,cbar_pT,cbar_phi,cbar_eta,cbarhad_pT,cbarhad_phi,cbarhad_eta,d1_pT,d1_phi,d1_eta,d1bar_pT,d1bar_phi,d1bar_eta,d2_pT,d2_phi,d2_eta,d2bar_pT,d2bar_phi,d2bar_eta,multiplicity,chad_cone_mult,chad_ptcone,cbarhad_cone_mult,cbarhad_ptcone\n";
+
 	Pythia pythia;
+	
+	//Tune of Pythia
+	if (argc ==2) {
+		pythia.readFile(argv[2]);
+		cout<<"Reading Pythia Tune: "<<argv[2]<<endl;
+	}
+
 	pythia.readString("Beams:eCM = 13000.");
 	pythia.readString("HardQCD:hardccbar = on");
 	pythia.readString("421:onMode = off"); 
 	pythia.readString("421:onIfMatch = 211 321"); 
 	//pythia.readString("PhaseSpace:pTHatMin = 4.");
+	
 	pythia.init();
 
 	//bool print = true; //boolean to print first selected event

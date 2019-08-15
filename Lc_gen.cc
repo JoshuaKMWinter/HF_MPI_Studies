@@ -9,7 +9,7 @@
 
 using namespace Pythia8;
 
-int main() {
+int main(int argc, char* argv[]) {
 
 	const int chadron_id = 4122; //PDG ID of charm hadron for selected decay
 	const int d1_id = 2212;     //Decay product ids
@@ -17,11 +17,28 @@ int main() {
 	const int d3_id = 211;
 	const int d4_id = 211;
 
-	std::ofstream datafile; datafile.open("Lc_EventData_ptmin4.csv");
+	 char* outfile;
+
+        if (argc == 0) outfile = (char*)"CSVs/Lc_EventData.csv";
+        else if (argc !=3) {cout<<"Wrong number of arguments. One output file and on pythia tune expected. Program stopped."<<endl; return(1);}
+        else {
+                outfile = argv[1];
+                ifstream is(argv[2]);
+                if (!is) {cout<<"Pythia tune not found! Program stopped."; return(1);}
+        }
+
+	std::ofstream datafile; datafile.open(outfile);
 	datafile << "cLO_pT,cLO_phi,cLO_eta,c_pT,c_phi,c_eta,chad_pT,chad_phi,chad_eta,cbarLO_pT,cbarLO_phi,cbarLO_eta,cbar_pT,cbar_phi,cbar_eta,cbarhad_pT,cbarhad_phi,cbarhad_eta,d1_pT,d1_phi,d1_eta,d1bar_pT,d1bar_phi,d1bar_eta,d2_pT,d2_phi,d2_eta,d2bar_pT,d2bar_phi,d2bar_eta,d3_pT,d3_phi,d3_eta,d3bar_pT,d3bar_phi,d3bar_eta,d4_pT,d4_phi,d4_eta,d4bar_pT,d4bar_phi,d4bar_eta,multiplicity,chad_cone_mult,chad_ptcone,cbarhad_cone_mult,cbarhad_ptcone\n";
 
 	//Set-up event properties
 	Pythia pythia;
+
+	//Tune of Pythia
+	 if (argc ==2) {
+                pythia.readFile(argv[2]);
+                cout<<"Reading Pythia Tune: "<<argv[2]<<endl;
+        }
+
 	pythia.readString("Beams:eCM = 13000.");      //set collision centre of mass energy
 	pythia.readString("HardQCD:hardccbar = on");  //Select ccbar production
 	pythia.readString("4122:onMode = off");        //Turn off decay modes for selected charmed hadron
@@ -30,7 +47,7 @@ int main() {
 	pythia.readString("311:onIfMatch = 310"); //force K0 -> K0_S -> pi+ pi- decay
 	pythia.readString("310:onMode = off");
 	pythia.readString("310:onIfMatch = 211 211");
-	pythia.readString("PhaseSpace:pTHatMin = 4.");
+	//pythia.readString("PhaseSpace:pTHatMin = 4.");
 	pythia.init();
 	
 	// Begin event loop. Generate event. Skip if error. List first one.

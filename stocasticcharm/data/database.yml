@@ -22,22 +22,44 @@ Ds:
       cbar_pT,cbar_phi,cbar_eta,cbarhad_pT,cbarhad_phi,cbarhad_eta,d1_pT,d1_phi,d1_eta,d1bar_pT,d1bar_phi,d1bar_eta,
       d2_pT,d2_phi,d2_eta,d2bar_pT,d2bar_phi,d2bar_eta,d3_pT,d3_phi,d3_eta,d3bar_pT,d3bar_phi,d3bar_eta,d4_pT,d4_phi,
       d4_eta,d4bar_pT,d4bar_phi,d4bar_eta,multiplicity,chad_cone_mult,chad_ptcone,cbarhad_cone_mult,cbarhad_ptcone]
+
   fileinput: ../input/Ds_EventData.csv
-  sel_1d_ptchad:  chad_pT>0
+  sel_1d_ptchad:  chad_pT>-1 and cbarhad_pT>-1
   var_1d_distr: [ [multiplicity], [FFc, FFcbar], [chad_cone_mult, cbarhad_cone_mult], [cLO_ptratio, c_ptratio, chad_ptratio],
                [cLO_pT, c_pT, chad_pT], [dphi_ccLO, dphi_cc, dphi_cchad], [deta_ccLO, deta_cc, deta_cchad], [dphi_chad, dphi_cbarhad],
                [deta_chad, deta_cbarhad], [chad_ptcone, cbarhad_ptcone] ]
   nbins_1d_distr: [50, 30, 35, 25, 19, 16, 20, 16, 20, 30]
   min_1d_distr: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   max_1d_distr: [500, 3, 35, 5, 38, 3.2, 7, 3.2, 7, 15]
-  title_1d_distr: [ 'Event Multiplicity', 'c-quark Fragmentation Distribution', 'Hadron cone multiplicity (R=0.7)', 'c-#bar{c} Transverse momentum ratio',
+  title_1d_distr: [ 'Event Multiplicity', 'Charmed Hadron Fragmentation Distribution', 'Hadron cone multiplicity (R=0.7)', 'c-#bar{c} Transverse momentum ratio',
                  'c-quark transverse momentum', 'Angular separation of c-#bar{c} pair', 'pseudorapidity separation of c-#bar{c} pair', 'Angular separation of quark-hadron pair',
                  'Pseudorapidity separation of quark-hadron pair', ' Total p_{T} within cone (R=0.7) around hadron' ]
   leg_1d_distr: [ ['multiplicity'], ['c-hadron', '#bar{c}-hadron'], ['c-hadron cone multi.', '#bar{c}-hadron cone multi.'], ['LO', 'Before hadronisation', 'After hadronisation'],
                ['LO', 'Before hadronisation', 'After hadronisation'], ['LO', 'Before hadronisation', 'After hadronisation'], ['LO', 'Before hadronisation', 'After hadronisation'],
                ['c-quark', '#bar{c}-quark'], ['c-quark', '#bar{c}-quark'], ['c-quark', '#bar{c}-quark'] ]
+  xlab_1d_distr: ['Number of final particles', 'p_{T} hadron / p_{T} cone (R<0.7)', 'Number of final particles around hadron (R<0.7)', 'p_{T} c / p_{T} #bar{c}', 'p_{T} c (GeV)', '#Delta#phi(c,#bar{c})', '#Delta#eta(c,#bar{c})', '#Delta#phi(c,hadron)', '#Delta#eta(c,hadron)', 'Total p_{T} within cone R<0.7 (GeV)'] 
+  ylab_1d_distr: ['Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events']
   logy_1d_distr: [True, False, False, True, True, False, False, False, False, False] 
-  colours: [4, 2, 1]
+  
+  tune_fileinput: [../input/Ds_EventData.csv, ../input/Ds_EventData_WithMPI_NoCR.csv, ../input/Ds_EventData_WithMPI_MoreQCDBased.csv, 
+            ../input/Ds_EventData_WithMPI_MPIBased.csv, ../input/Ds_EventData_WithMPI_Ropes.csv, ../input/Ds_EventData_WithMPI_RopesShoving.csv]
+  var_tune_distr: [ [cLO_pT, c_pT, chad_pT], [FFc], [multiplicity], [chad_cone_mult], [c_ptratio, chad_ptratio], 
+                 [dphi_cc, dphi_cchad], [deta_ccLO, deta_cc, deta_cchad], [dphi_chad], [deta_chad], [chad_ptcone]]
+  nbins_tune_distr: [19, 30, 50, 35, 25, 16, 20, 16, 20, 30]
+  min_tune_distr: [0,0,0,0,0,0,0,0,0,0]
+  max_tune_distr: [38, 3, 500, 35, 5, 3.2, 7, 3.2, 7, 15]
+  title_tune_distr: [ ['Charm Transverse Momentum (LO)', 'Charm Transverse Momentum (prior to hadronisation)', 'Charmed Hadron Transverse Momentum'], ['Charmed Hadron Fragmentation Distribution'],
+                   ['Event Multiplicity'], ['Hadron cone multiplicity (R<0.7)'], ['c/#bar{c} Quark Transverse Momentum Ratio', 'c/#bar{c} Hadron Transverse Momentum Ratio'],
+                   ['Angular separation of charm-quark pair' ,'Angular separation of charm hadron pair'],
+                   ['Pseudorapidity difference of charm-quark pair (LO)','Pseudorapidity difference of charm-quark pair','Pseudorapidity difference of charm hadron pair'],
+                   ['Angular separation between charm quark-hadron pair'],['Pseudorapidity difference of charm quark-hadron pair'],['Total p_{T} within cone (R=0.7) around hadron']]
+  xlab_tune_distr: ['p_{T} c (GeV)', 'p_{T} hadron / p_{T} cone (R<0.7)', 'Event Multiplicity', 'Number of final particles around hadron (R<0.7)', 'p_{T} c / p_{T} #bar{c}',
+                  '#Delta#phi','#Delta#eta','#Delta#phi','#Delta#eta', 'Total p_{T} within cone R<0.7 (GeV)']
+  ylab_tune_distr: ['Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events']
+  leg_tune_distr: ['Default', 'NoCR', 'MoreQCDBased', 'MPIBased', 'Ropes', 'RopesShoving']
+
+  colours: [4, 2, 1, 3, 6, 7]
+  multi_bins: [0,100,300] 
 
 D0:
   mass: 1.864
@@ -49,22 +71,45 @@ D0:
       cbar_pT,cbar_phi,cbar_eta,cbarhad_pT,cbarhad_phi,cbarhad_eta,d1_pT,d1_phi,d1_eta,d1bar_pT,d1bar_phi,d1bar_eta,
       d2_pT,d2_phi,d2_eta,d2bar_pT,d2bar_phi,d2bar_eta,d3_pT,d3_phi,d3_eta,d3bar_pT,d3bar_phi,d3bar_eta,d4_pT,d4_phi,
       d4_eta,d4bar_pT,d4bar_phi,d4bar_eta,multiplicity,chad_cone_mult,chad_ptcone,cbarhad_cone_mult,cbarhad_ptcone]
+  
   fileinput: ../input/D0_EventData.csv
-  sel_1d_ptchad:  chad_pT>0
+  sel_1d_ptchad:  chad_pT>-1 and cbarhad_pT>-1
   var_1d_distr: [ [multiplicity], [FFc, FFcbar], [chad_cone_mult, cbarhad_cone_mult], [cLO_ptratio, c_ptratio, chad_ptratio],
                [cLO_pT, c_pT, chad_pT], [dphi_ccLO, dphi_cc, dphi_cchad], [deta_ccLO, deta_cc, deta_cchad], [dphi_chad, dphi_cbarhad],
                [deta_chad, deta_cbarhad], [chad_ptcone, cbarhad_ptcone] ]
   nbins_1d_distr: [50, 30, 35, 25, 19, 16, 20, 16, 20, 30]
   min_1d_distr: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   max_1d_distr: [500, 3, 35, 5, 38, 3.2, 7, 3.2, 7, 15]
-  title_1d_distr: [ 'Event Multiplicity', 'c-quark Fragmentation Distribution', 'Hadron cone multiplicity (R=0.7)', 'c-#bar{c} Transverse momentum ratio',
+  title_1d_distr: [ 'Event Multiplicity', 'Charmed Hadron Fragmentation Distribution', 'Hadron cone multiplicity (R=0.7)', 'c-#bar{c} Transverse momentum ratio',
                  'c-quark transverse momentum', 'Angular separation of c-#bar{c} pair', 'pseudorapidity separation of c-#bar{c} pair', 'Angular separation of quark-hadron pair',
                  'Pseudorapidity separation of quark-hadron pair', ' Total p_{T} within cone (R=0.7) around hadron' ]
   leg_1d_distr: [ ['multiplicity'], ['c-hadron', '#bar{c}-hadron'], ['c-hadron cone multi.', '#bar{c}-hadron cone multi.'], ['LO', 'Before hadronisation', 'After hadronisation'],
                ['LO', 'Before hadronisation', 'After hadronisation'], ['LO', 'Before hadronisation', 'After hadronisation'], ['LO', 'Before hadronisation', 'After hadronisation'],
-               ['c-quark', '#bar{c}-quark'], ['c-quark', '#bar{c}-quark'], ['c-quark', '#bar{c}-quark'] ]
+               ['c-quark', '#bar{c}-quark'], ['c-quark', '#bar{c}-quark'], ['c-quark', '#bar{c}-quark'] ] 
+  xlab_1d_distr: ['Number of final particles', 'p_{T} hadron / p_{T} cone (R<0.7)', 'Number of final particles around hadron (R<0.7)', 'p_{T} c / p_{T} #bar{c}', 'p_{T} c (GeV)', '#Delta#phi(c,#bar{c})', '#Delta#eta(c,#bar{c})', '#Delta#phi(c,hadron)', '#Delta#eta(c,hadron)', 'Total p_{T} within cone R<0.7 (GeV)'] 
+  ylab_1d_distr: ['Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events']
   logy_1d_distr: [True, False, False, True, True, False, False, False, False, False] 
-  colours: [4, 2, 1]
+  
+  tune_fileinput: [../input/D0_EventData.csv, ../input/D0_EventData_WithMPI_NoCR.csv, ../input/D0_EventData_WithMPI_MoreQCDBased.csv, 
+            ../input/D0_EventData_WithMPI_MPIBased.csv, ../input/D0_EventData_WithMPI_Ropes.csv, ../input/D0_EventData_WithMPI_RopesShoving.csv]
+  var_tune_distr: [ [cLO_pT, c_pT, chad_pT], [FFc], [multiplicity], [chad_cone_mult], [c_ptratio, chad_ptratio], 
+                 [dphi_cc, dphi_cchad], [deta_ccLO, deta_cc, deta_cchad], [dphi_chad], [deta_chad], [chad_ptcone]]
+  nbins_tune_distr: [19, 30, 50, 35, 25, 16, 20, 16, 20, 30]
+  min_tune_distr: [0,0,0,0,0,0,0,0,0,0]
+  max_tune_distr: [38, 3, 500, 35, 5, 3.2, 7, 3.2, 7, 15]
+  title_tune_distr: [ ['Charm Transverse Momentum (LO)', 'Charm Transverse Momentum (prior to hadronisation)', 'Charmed Hadron Transverse Momentum'], ['Charmed Hadron Fragmentation Distribution'],
+                   ['Event Multiplicity'], ['Hadron cone multiplicity (R<0.7)'], ['c/#bar{c} Quark Transverse Momentum Ratio', 'c/#bar{c} Hadron Transverse Momentum Ratio'],
+                   ['Angular separation of charm-quark pair' ,'Angular separation of charm hadron pair'],
+                   ['Pseudorapidity difference of charm-quark pair (LO)','Pseudorapidity difference of charm-quark pair','Pseudorapidity difference of charm hadron pair'],
+                   ['Angular separation between charm quark-hadron pair'],['Pseudorapidity difference of charm quark-hadron pair'],['Total p_{T} within cone (R=0.7) around hadron']]
+  xlab_tune_distr: ['p_{T} c (GeV)', 'p_{T} hadron / p_{T} cone (R<0.7)', 'Event Multiplicity', 'Number of final particles around hadron (R<0.7)', 'p_{T} c / p_{T} #bar{c}',
+                  '#Delta#phi','#Delta#eta','#Delta#phi','#Delta#eta', 'Total p_{T} within cone R<0.7 (GeV)']
+  ylab_tune_distr: ['Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events']
+  leg_tune_distr: ['Default', 'NoCR', 'MoreQCDBased', 'MPIBased', 'Ropes', 'RopesShoving']
+
+  colours: [4, 2, 1, 3, 6, 7]
+  multi_bins: [0,100,300] 
+
 
 Lc:
   mass: 2.286
@@ -76,19 +121,42 @@ Lc:
       cbar_pT,cbar_phi,cbar_eta,cbarhad_pT,cbarhad_phi,cbarhad_eta,d1_pT,d1_phi,d1_eta,d1bar_pT,d1bar_phi,d1bar_eta,
       d2_pT,d2_phi,d2_eta,d2bar_pT,d2bar_phi,d2bar_eta,d3_pT,d3_phi,d3_eta,d3bar_pT,d3bar_phi,d3bar_eta,d4_pT,d4_phi,
       d4_eta,d4bar_pT,d4bar_phi,d4bar_eta,multiplicity,chad_cone_mult,chad_ptcone,cbarhad_cone_mult,cbarhad_ptcone]
+
   fileinput: ../input/Lc_EventData.csv
-  sel_1d_ptchad:  chad_pT>0
+  sel_1d_ptchad:  chad_pT>-1 and cbarhad_pT>-1
   var_1d_distr: [ [multiplicity], [FFc, FFcbar], [chad_cone_mult, cbarhad_cone_mult], [cLO_ptratio, c_ptratio, chad_ptratio],
                [cLO_pT, c_pT, chad_pT], [dphi_ccLO, dphi_cc, dphi_cchad], [deta_ccLO, deta_cc, deta_cchad], [dphi_chad, dphi_cbarhad],
                [deta_chad, deta_cbarhad], [chad_ptcone, cbarhad_ptcone] ]
   nbins_1d_distr: [50, 30, 35, 25, 19, 16, 20, 16, 20, 30]
   min_1d_distr: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   max_1d_distr: [500, 3, 35, 5, 38, 3.2, 7, 3.2, 7, 15]
-  title_1d_distr: [ 'Event Multiplicity', 'c-quark Fragmentation Distribution', 'Hadron cone multiplicity (R=0.7)', 'c-#bar{c} Transverse momentum ratio',
+  title_1d_distr: [ 'Event Multiplicity', 'Charmed Hadron Fragmentation Distribution', 'Hadron cone multiplicity (R=0.7)', 'c-#bar{c} Transverse momentum ratio',
                  'c-quark transverse momentum', 'Angular separation of c-#bar{c} pair', 'pseudorapidity separation of c-#bar{c} pair', 'Angular separation of quark-hadron pair',
                  'Pseudorapidity separation of quark-hadron pair', ' Total p_{T} within cone (R=0.7) around hadron' ]
   leg_1d_distr: [ ['multiplicity'], ['c-hadron', '#bar{c}-hadron'], ['c-hadron cone multi.', '#bar{c}-hadron cone multi.'], ['LO', 'Before hadronisation', 'After hadronisation'],
                ['LO', 'Before hadronisation', 'After hadronisation'], ['LO', 'Before hadronisation', 'After hadronisation'], ['LO', 'Before hadronisation', 'After hadronisation'],
                ['c-quark', '#bar{c}-quark'], ['c-quark', '#bar{c}-quark'], ['c-quark', '#bar{c}-quark'] ]
+  xlab_1d_distr: ['Number of final particles', 'p_{T} hadron / p_{T} cone (R<0.7)', 'Number of final particles around hadron (R<0.7)', 'p_{T} c / p_{T} #bar{c}', 'p_{T} c (GeV)', '#Delta#phi(c,#bar{c})', '#Delta#eta(c,#bar{c})', '#Delta#phi(c,hadron)', '#Delta#eta(c,hadron)', 'Total p_{T} within cone R<0.7 (GeV)'] 
+  ylab_1d_distr: ['Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events']
   logy_1d_distr: [True, False, False, True, True, False, False, False, False, False] 
-  colours: [4, 2, 1]
+  
+  tune_fileinput: [../input/Lc_EventData.csv, ../input/Lc_EventData_WithMPI_NoCR.csv, ../input/Lc_EventData_WithMPI_MoreQCDBased.csv, 
+            ../input/Lc_EventData_WithMPI_MPIBased.csv, ../input/Lc_EventData_WithMPI_Ropes.csv, ../input/Lc_EventData_WithMPI_RopesShoving.csv]
+  var_tune_distr: [ [cLO_pT, c_pT, chad_pT], [FFc], [multiplicity], [chad_cone_mult], [c_ptratio, chad_ptratio], 
+                 [dphi_cc, dphi_cchad], [deta_ccLO, deta_cc, deta_cchad], [dphi_chad], [deta_chad], [chad_ptcone]]
+  nbins_tune_distr: [19, 30, 50, 35, 25, 16, 20, 16, 20, 30]
+  min_tune_distr: [0,0,0,0,0,0,0,0,0,0]
+  max_tune_distr: [38, 3, 500, 35, 5, 3.2, 7, 3.2, 7, 15]
+  title_tune_distr: [ ['Charm Transverse Momentum (LO)', 'Charm Transverse Momentum (prior to hadronisation)', 'Charmed Hadron Transverse Momentum'], ['Charmed Hadron Fragmentation Distribution'],
+                   ['Event Multiplicity'], ['Hadron cone multiplicity (R<0.7)'], ['c/#bar{c} Quark Transverse Momentum Ratio', 'c/#bar{c} Hadron Transverse Momentum Ratio'],
+                   ['Angular separation of charm-quark pair' ,'Angular separation of charm hadron pair'],
+                   ['Pseudorapidity difference of charm-quark pair (LO)','Pseudorapidity difference of charm-quark pair','Pseudorapidity difference of charm hadron pair'],
+                   ['Angular separation between charm quark-hadron pair'],['Pseudorapidity difference of charm quark-hadron pair'],['Total p_{T} within cone (R=0.7) around hadron']]
+  xlab_tune_distr: ['p_{T} c (GeV)', 'p_{T} hadron / p_{T} cone (R<0.7)', 'Event Multiplicity', 'Number of final particles around hadron (R<0.7)', 'p_{T} c / p_{T} #bar{c}',
+                  '#Delta#phi','#Delta#eta','#Delta#phi','#Delta#eta', 'Total p_{T} within cone R<0.7 (GeV)']
+  ylab_tune_distr: ['Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events']
+  leg_tune_distr: ['Default', 'NoCR', 'MoreQCDBased', 'MPIBased', 'Ropes', 'RopesShoving']
+
+  colours: [4, 2, 1, 3, 6, 7]
+  multi_bins: [0,100,300] 
+

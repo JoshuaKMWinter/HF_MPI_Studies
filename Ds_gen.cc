@@ -10,7 +10,7 @@
 
 using namespace Pythia8;
 
-int main() {
+int main(int argc, char* argv[]) {
 
 	const int chadron_id = 431; 	//PDG ID of charm meson for selected decay
 	const int d1_id = 211;		//Decay product ids. pi+
@@ -18,18 +18,35 @@ int main() {
 	const int d3_id = 321;		//K+
 	const int d4_id = 321;		//K+
 
-	std::ofstream datafile; datafile.open("Ds_EventData_ptmin4.csv");
+        char* outfile;
+
+	 if (argc == 0) outfile = (char*)"CSVs/Ds_EventData.csv";
+        else if (argc !=3) {cout<<"Wrong number of arguments. One output file and on pythia tune expected. Program stopped."<<endl; return(1);}
+        else {
+                outfile = argv[1];
+                ifstream is(argv[2]);
+                if (!is) {cout<<"Pythia tune not found! Program stopped."; return(1);}
+        }
+
+	std::ofstream datafile; datafile.open(outfile);
 	datafile << "cLO_pT,cLO_phi,cLO_eta,c_pT,c_phi,c_eta,chad_pT,chad_phi,chad_eta,cbarLO_pT,cbarLO_phi,cbarLO_eta,cbar_pT,cbar_phi,cbar_eta,cbarhad_pT,cbarhad_phi,cbarhad_eta,d1_pT,d1_phi,d1_eta,d1bar_pT,d1bar_phi,d1bar_eta,d2_pT,d2_phi,d2_eta,d2bar_pT,d2bar_phi,d2bar_eta,d3_pT,d3_phi,d3_eta,d3bar_pT,d3bar_phi,d3bar_eta,d4_pT,d4_phi,d4_eta,d4bar_pT,d4bar_phi,d4bar_eta,multiplicity,chad_cone_mult,chad_ptcone,cbarhad_cone_mult,cbarhad_ptcone\n";
 
 	//Set-up event properties
 	Pythia pythia;
+
+	//Tune of Pythia
+        if (argc ==2) {
+                pythia.readFile(argv[2]);
+                cout<<"Reading Pythia Tune: "<<argv[2]<<endl;
+        }
+
 	pythia.readString("Beams:eCM = 13000.");      //set collision centre of mass energy
 	pythia.readString("HardQCD:hardccbar = on");  //Select ccbar production
 	pythia.readString("431:onMode = off");        //Turn off decay modes for selected charmed hadron
 	pythia.readString("431:onIfMatch = 211 333"); //Selected desired decays for charmed hadron
 	pythia.readString("333:onMode = off");
 	pythia.readString("333:onIfMatch = 321 321"); //Force phi > K+ K- decay
-	pythia.readString("PhaseSpace:pTHatMin = 4.");
+	//pythia.readString("PhaseSpace:pTHatMin = 4.");
 	pythia.init();
 	
 	// Begin event loop. Generate event. Skip if error. List first one.
