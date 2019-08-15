@@ -66,8 +66,8 @@ class Analyzer:
         self.logy_1d_distr  = datap["logy_1d_distr"]
         self.n_1d = len(self.max_1d_distr) 
         self.dfm = None
-        self.dfm = pd.read_csv(self.inputfile)
-        self.add_derived(self.dfm)
+        #self.dfm = pd.read_csv(self.inputfile)
+        #self.add_derived(self.dfm)
 
         self.tune_fileinput   = datap["tune_fileinput"]
         self.var_tune_distr   = datap["var_tune_distr"]
@@ -79,7 +79,8 @@ class Analyzer:
         self.xlab_tune_distr  = datap["xlab_tune_distr"]
         self.ylab_tune_distr  = datap["ylab_tune_distr"]
 
-        self.dfpt = pd.read_csv("../input/pThad_Data.csv")
+        self.dfpt = None
+        self.pthad_fileinput  = datap["pthad_fileinput"]
         self.multi_bins = datap["multi_bins"]
 
 #    def add_derived(self): #change this function so it can be applied to ANY dataframe
@@ -119,108 +120,119 @@ class Analyzer:
 
     def plot(self):
         print("Running analyzer")
-       
-        outfile = TFile("data/" + self.case + "_hists.root", "RECREATE")
-       
-        dfsel = self.dfm.query(self.sel_1d_ptchad)
         
-        for index in range(self.n_1d):    
-            c = TCanvas('c_'+self.var_1d_distr[index][0],'',600,600)
+        for ifile in range(len(self.tune_fileinput)):
+            outfile = TFile("data/" + self.case+"_"+self.leg_tune_distr[ifile] + "_hists.root", "RECREATE")
+            
+            self.dfm = pd.read_csv(self.tune_fileinput[ifile])
+            self.add_derived(self.dfm)
+            dfsel = self.dfm.query(self.sel_1d_ptchad)
+            
+            for index in range(self.n_1d):    
+                c = TCanvas('c_'+self.var_1d_distr[index][0],'',600,600)
+                legend = TLegend(.7,.75,.9,.9)
+                histlist = []
+                for i in range( len(self.var_1d_distr[index]) ):
+                    hist = TH1F("h_"+self.var_1d_distr[index][i],
+                                "h_"+self.var_1d_distr[index][i],
+                                self.nbins_1d_distr[index],
+                                self.min_1d_distr[index],
+                                self.max_1d_distr[index])
+                    hist.Sumw2()
+                    hist.SetLineColor(self.colours[i])
+                    hist.SetTitle(self.case + ": " + self.title_1d_distr[index] )
+                    hist.SetXTitle(self.xlab_1d_distr[index])
+                    hist.SetYTitle(self.ylab_1d_distr[index])
+                    hist.SetStats(0)
+                    fill_hist(hist, dfsel[self.var_1d_distr[index][i]])
+                    histlist.append(hist)
+                    hist.Write()
+                    legend.AddEntry(hist, self.leg_1d_distr[index][i])
+                hmax = Find_Hist_Max(histlist) 
+                   
+                for ihist in range( len(histlist) ):
+                    if ihist == 0:
+                        histlist[ihist].SetMaximum(hmax*1.3)
+                        if self.logy_1d_distr[index] :
+                            c.SetLogy()
+                            histlist[ihist].SetMinimum(0.5)
+                            histlist[ihist].SetMaximum(hmax*10)
+                        histlist[ihist].Draw()
+                    else: histlist[ihist].Draw("SAME")
+                legend.Draw()
+                c.SaveAs("plots/%s/%s/c_%s_%s.eps" % (self.leg_tune_distr[ifile], self.case, self.case, self.var_1d_distr[index][0]))
+            outfile.Close()
+
+    def hadron_ptratio(self):
+       
+        for ifile in range(len(self.pthad_fileinput)):
+            self.dfpt = pd.read_csv(self.pthad_fileinput[ifile])
+            
+            dfD0 = self.dfpt[self.dfpt.hadron_pdg == 421]
+            dfhad = self.dfpt[self.dfpt.hadron_pdg == self.pdg]
+
+            pt_bins = [0,1,2,3,5,10,20,50]
+            c = TCanvas('c_'+self.case+'pt_over_D0pt','',600,600)
             legend = TLegend(.7,.75,.9,.9)
             histlist = []
-            for i in range( len(self.var_1d_distr[index]) ):
-                hist = TH1F("h_"+self.var_1d_distr[index][i],
-                            "h_"+self.var_1d_distr[index][i],
-                            self.nbins_1d_distr[index],
-                            self.min_1d_distr[index],
-                            self.max_1d_distr[index])
-                hist.Sumw2()
-                hist.SetLineColor(self.colours[i])
-                hist.SetTitle(self.case + ": " + self.title_1d_distr[index] )
-                hist.SetXTitle(self.xlab_1d_distr[index])
-                hist.SetYTitle(self.ylab_1d_distr[index])
-                hist.SetStats(0)
-                fill_hist(hist, dfsel[self.var_1d_distr[index][i]])
-                histlist.append(hist)
-                hist.Write()
-                legend.AddEntry(hist, self.leg_1d_distr[index][i])
-            hmax = Find_Hist_Max(histlist) 
-               
-            for ihist in range( len(histlist) ):
+            
+            for i in range(len(self.multi_bins)):
+                legstr = ''
+                if i<len(self.multi_bins)-1: 
+                    dfD0sel  =  dfD0[np.logical_and(dfD0.multiplicity >= self.multi_bins[i],   dfD0.multiplicity < self.multi_bins[i+1])]
+                    dfhadsel = dfhad[np.logical_and(dfhad.multiplicity >= self.multi_bins[i], dfhad.multiplicity < self.multi_bins[i+1])]
+                    legstr = str(self.multi_bins[i]) + "<= multiplicity <" + str(self.multi_bins[i+1])
+                else: 
+                    dfD0sel  =  dfD0[dfD0.multiplicity >=  self.multi_bins[i]]
+                    dfhadsel = dfhad[dfhad.multiplicity >= self.multi_bins[i]]
+                    legstr = "multiplicity >=" + str(self.multi_bins[i])
+                h_D0 = TH1F("h_D0_pt_multbin"+str(i),"h_D0_pt_multbin"+str(i),7,array('d',pt_bins))
+                h_had = TH1F("h_"+self.case+"_pt_multbin"+str(i),"h_"+self.case+"_pt_multbin"+str(i),7,array('d',pt_bins))
+                h_D0.Sumw2()
+                h_had.Sumw2()
+                fill_hist(h_D0, dfD0sel['pt_had'])
+                fill_hist(h_had, dfhadsel['pt_had'])
+                h_had.Divide(h_D0)
+                h_had.SetTitle("Histogram ratio of " + self.case + " pT over D0 pT spectra")
+                h_had.SetXTitle("p_{T} (GeV)")
+                h_had.SetYTitle("# "+ self.case + "/# D^{0}")
+                h_had.SetLineColor(self.colours[i])
+                h_had.SetStats(0)
+                legend.AddEntry(h_had, legstr)
+                histlist.append(h_had)
+            hmax = Find_Hist_Max(histlist)
+            for ihist in range(len(histlist)):
                 if ihist == 0:
-                    histlist[ihist].SetMaximum(hmax*1.3)
-                    if self.logy_1d_distr[index] :
-                        c.SetLogy()
-                        histlist[ihist].SetMinimum(0.5)
-                        histlist[ihist].SetMaximum(hmax*10)
+                    histlist[ihist].SetMaximum(hmax*1.5)
                     histlist[ihist].Draw()
                 else: histlist[ihist].Draw("SAME")
             legend.Draw()
-            c.SaveAs("plots/%s/c_%s_%s.eps" % (self.case, self.case, self.var_1d_distr[index][0]))
-        outfile.Close()
-
-    def hadron_ptratio(self):
-        dfD0 = self.dfpt[self.dfpt.hadron_pdg == 421]
-        dfhad = self.dfpt[self.dfpt.hadron_pdg == self.pdg]
-
-        pt_bins = [0,1,2,3,5,10,20,50]
-        c = TCanvas('c_'+self.case+'pt_over_D0pt','',600,600)
-        legend = TLegend(.7,.75,.9,.9)
-        histlist = []
-        
-        for i in range(len(self.multi_bins)):
-            legstr = ''
-            if i<len(self.multi_bins)-1: 
-                dfD0sel  =  dfD0[np.logical_and(dfD0.multiplicity >= self.multi_bins[i],   dfD0.multiplicity < self.multi_bins[i+1])]
-                dfhadsel = dfhad[np.logical_and(dfhad.multiplicity >= self.multi_bins[i], dfhad.multiplicity < self.multi_bins[i+1])]
-                legstr = str(self.multi_bins[i]) + "<= multiplicity <" + str(self.multi_bins[i+1])
-            else: 
-                dfD0sel  =  dfD0[dfD0.multiplicity >=  self.multi_bins[i]]
-                dfhadsel = dfhad[dfhad.multiplicity >= self.multi_bins[i]]
-                legstr = "multiplicity >=" + str(self.multi_bins[i])
-            h_D0 = TH1F("h_D0_pt_multbin"+str(i),"h_D0_pt_multbin"+str(i),7,array('d',pt_bins))
-            h_had = TH1F("h_"+self.case+"_pt_multbin"+str(i),"h_"+self.case+"_pt_multbin"+str(i),7,array('d',pt_bins))
-            h_D0.Sumw2()
-            h_had.Sumw2()
-            fill_hist(h_D0, dfD0sel['pt_had'])
-            fill_hist(h_had, dfhadsel['pt_had'])
-            h_had.Divide(h_D0)
-            h_had.SetTitle("Histogram ratio of " + self.case + " pT over D0 pT spectra")
-            h_had.SetXTitle("p_{T} (GeV)")
-            h_had.SetYTitle("# "+ self.case + "/# D^{0}")
-            h_had.SetLineColor(self.colours[i])
-            h_had.SetStats(0)
-            legend.AddEntry(h_had, legstr)
-            histlist.append(h_had)
-        hmax = Find_Hist_Max(histlist)
-        for ihist in range(len(histlist)):
-            if ihist == 0:
-                histlist[ihist].SetMaximum(hmax*1.5)
-                histlist[ihist].Draw()
-            else: histlist[ihist].Draw("SAME")
-        legend.Draw()
-        c.SaveAs("plots/%s/c_%spt_over_D0pt.eps" % (self.case, self.case))
+            c.SaveAs("plots/%s/%s/c_%spt_over_D0pt.eps" % (self.leg_tune_distr[ifile], self.case, self.case))
 
     def hadron_multiratio(self):
-        dfD0 = self.dfpt[self.dfpt.hadron_pdg == 421]
-        dfhad = self.dfpt[self.dfpt.hadron_pdg == self.pdg]
-        multibins = self.multi_bins
-        multibins.append(1000)
 
-        c = TCanvas('c_'+self.case+'_multiratio','',600,600)
-        h_D0 = TH1F("h_D0_multiratio","h_D0_multiratio",3,array('d',multibins))
-        h_had = TH1F("h_"+self.case+"_multiratio","h_"+self.case+"_multiratio",3,array('d',multibins))
-        h_D0.Sumw2()
-        h_had.Sumw2()
-        fill_hist(h_D0, dfD0['multiplicity'])
-        fill_hist(h_had, dfhad['multiplicity'])
-        h_had.Divide(h_D0)
-        h_had.SetTitle("Histogram ratio of " + self.case + " multiplicity over D0 multiplicity")
-        h_had.SetXTitle("# final particles")
-        h_had.SetYTitle("# "+ self.case + "/# D^{0}")
-        h_had.SetStats(0)
-        h_had.Draw()
-        c.SaveAs("plots/%s/c_%s_multiratio.eps" % (self.case, self.case))
+        for ifile in range(len(self.pthad_fileinput)):
+            self.dfpt = pd.read_csv(self.pthad_fileinput[ifile])
+
+            dfD0 = self.dfpt[self.dfpt.hadron_pdg == 421]
+            dfhad = self.dfpt[self.dfpt.hadron_pdg == self.pdg]
+            multibins = self.multi_bins
+            multibins.append(1000)
+
+            c = TCanvas('c_'+self.case+'_multiratio','',600,600)
+            h_D0 = TH1F("h_D0_multiratio","h_D0_multiratio",3,array('d',multibins))
+            h_had = TH1F("h_"+self.case+"_multiratio","h_"+self.case+"_multiratio",3,array('d',multibins))
+            h_D0.Sumw2()
+            h_had.Sumw2()
+            fill_hist(h_D0, dfD0['multiplicity'])
+            fill_hist(h_had, dfhad['multiplicity'])
+            h_had.Divide(h_D0)
+            h_had.SetTitle("Histogram ratio of " + self.case + " multiplicity over D0 multiplicity")
+            h_had.SetXTitle("# final particles")
+            h_had.SetYTitle("# "+ self.case + "/# D^{0}")
+            h_had.SetStats(0)
+            h_had.Draw()
+            c.SaveAs("plots/%s/%s/c_%s_multiratio.eps" % (self.leg_tune_distr[ifile], self.case, self.case))
 
     def plot_tunes(self):
         print("plotting tunes of Pythia")
@@ -257,4 +269,4 @@ class Analyzer:
                         histlist[icanv][ihist].Draw()
                     else: histlist[icanv][ihist].Draw("SAME")
                 legend.Draw()
-            c.SaveAs("plots/%s/TunePlots/c_%s_%s.eps" % (self.case, self.case, self.var_tune_distr[index][0]))
+            c.SaveAs("plots/TuneComparison/%s/c_%s_%s.eps" % (self.case, self.case, self.var_tune_distr[index][0]))

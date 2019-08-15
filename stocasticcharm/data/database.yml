@@ -59,6 +59,9 @@ Ds:
   leg_tune_distr: ['Default', 'NoCR', 'MoreQCDBased', 'MPIBased', 'Ropes', 'RopesShoving']
 
   colours: [4, 2, 1, 3, 6, 7]
+  
+  pthad_fileinput: [../input/pThad_Data.csv] 
+  #../input/pThad_Data_WithMPI_NoCR.csv, ../input/pThad_Data_WithMPI_MoreQCDBased.csv, ../input/pThad_Data_WithMPI_MPIBased.csv, ../input/pThad_Data_WithMPI_Ropes.csv, ../input/pThad_Data_WithMPI_RopesShoving.csv]
   multi_bins: [0,100,300] 
 
 D0:
@@ -108,6 +111,9 @@ D0:
   leg_tune_distr: ['Default', 'NoCR', 'MoreQCDBased', 'MPIBased', 'Ropes', 'RopesShoving']
 
   colours: [4, 2, 1, 3, 6, 7]
+  
+  pthad_fileinput: [../input/pThad_Data.csv] 
+  #../input/pThad_Data_WithMPI_NoCR.csv, ../input/pThad_Data_WithMPI_MoreQCDBased.csv, ../input/pThad_Data_WithMPI_MPIBased.csv, ../input/pThad_Data_WithMPI_Ropes.csv, ../input/pThad_Data_WithMPI_RopesShoving.csv]
   multi_bins: [0,100,300] 
 
 
@@ -158,5 +164,8 @@ Lc:
   leg_tune_distr: ['Default', 'NoCR', 'MoreQCDBased', 'MPIBased', 'Ropes', 'RopesShoving']
 
   colours: [4, 2, 1, 3, 6, 7]
+  
+  pthad_fileinput: [../input/pThad_Data.csv] 
+  #../input/pThad_Data_WithMPI_NoCR.csv, ../input/pThad_Data_WithMPI_MoreQCDBased.csv, ../input/pThad_Data_WithMPI_MPIBased.csv, ../input/pThad_Data_WithMPI_Ropes.csv, ../input/pThad_Data_WithMPI_RopesShoving.csv]
   multi_bins: [0,100,300] 
 

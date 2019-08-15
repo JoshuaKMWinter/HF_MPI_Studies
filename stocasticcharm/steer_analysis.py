@@ -39,5 +39,5 @@ def steer_analysis(case):
 steer_analysis("Ds")
 steer_analysis("D0")
 steer_analysis("Lc")
-#myplotter = Plotter()
-#myplotter.plotcomparison()
+myplotter = Plotter()
+myplotter.plotcomparison()
