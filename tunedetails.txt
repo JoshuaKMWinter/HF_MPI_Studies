@@ -1,0 +1,97 @@
+			
+					Default		NoCR		MPIBased		MoreQCDBased		Ropes		RopesShoving
+	 # of events D0 (200k)		48901		55285		49322			527			46556		5084
+		     Ds (400k)		2775		3023		2711			151			2892		302
+                     Lc (500k)		762		867		773			127			751		79
+
+Settings
+Tune:PreferLHAPDF			1		2		2			2			2		2
+Monash13				?		On		On			On			On		On
+Random:seed				-1		0		0			0			0		0
+Random:setSeed				Off		On		On			On			On		On
+ParticleDecays:limitTau0		Off		On		On			On			On		On
+ParticleDecays:tau0Max			10		3		3			3			3		3
+ColourReconnection:reconnect		On		Off					On (def)					
+ColourReconnection:mode			0							1			             
+ColourReconnection:timeDilationPar	0.18							0.18 (def)			             
+ColourReconnection:junctionCorrection	1.2							1.2 (def)
+PartonLevel:earlyResDec			Off		Off (def)			             
+MultiPartonInteractions:pT0Ref		2.28		2.30					2.15			             
+Ropewalk:RopeHadronization		Off										On		On
+Ropewalk:doShoving			Off										Off (def)	On
+Ropewalk:doFlavour			Off										On		Off (def)
+Ropewalk:r0				0.5										0.5 (def)	0.41
+Ropewalk:m0				0.2										0.2 (def)	0.2 (def)
+Ropewalk:beta				0.2										0.1		
+Ropewalk:rCutOff			6												10
+Ropewalk:limitMom			On												On (def)
+Ropewalk:pTcut				2												2 (def)
+Ropewalk:gAmplitude			5												10
+Ropewalk:gExponent			1												1 (def)
+Ropewalk:deltat				0.1												0.1 (def)
+Ropewalk:deltay				0.2												0.1	
+Ropewalk:tShove				1												1 (def)
+Ropewalk:tInit				1.5												1.5 (def)
+PartonVertex:setVertex			Off										On		On
+PartonVertex:protonRadius		0.7												0.7 (def)
+PartonVertex:emissionWidth		0.1												0.1 (def)
+
+ColourReconnection:
+      >>reconnect: Allow or not a system to be merged with another
+      >>mode: Model for colour reconnection. option 0 = MPI-Based Original Pythia8; 1 = new QCD Based scheme. SHOULD BE COMBINED WITH BeamRemnants:remnantMode = 1
+	range: Higher this number, more reconnections can occur (0,10)
+	m0: lambda measure for string length (def=0.3, (0.1,5))
+      >>junctionCorrection: allows to use a different m0 for junction strings in the lambda measure. It is multiplicative correction to the m0 chosen above. (0.01,10)
+	timeDilationMode: (def=2 (0,5)) Disallow colour reconnection between strings not in causal contact.
+      >>timeDilationPar: Tuneable parameter for time dilation (0,100)
+ParticleDecays:
+	(Tau: Proper lifetime of particle, in mm/c. Used by pythia to determine whether a particle should be allowed to decay)
+	(Tau0: nominal lifetime in mm/c.)
+      >>tau0Max: Upper limit of nominal lifetime
+      >>limitTau0: Only particles with tau0<tau0Max decay
+PartonLevel:
+	MPI: (def = on) Master switch for multiparton interactions
+      >>earlyResDec: If on, do resonance decays early, before beam handling including colour reconnection. If off, decays done afterwards, so unaffected by CR.
+HadronLevel:
+	HadronScatter: (def = off) Switch for hadron rescatterring, following hadronisation
+MultiPartonInteractions: <<< interesting parameters
+	alphaSvalue: (def = 0.130 (0.06,0.25)) value of strong coupling
+      >>pT0Ref: (def = 2.28, (0.5,10)) value is tied to a number of choices, such as that of colour flow description, so is difficult to give an independent meaning
+	bProfile: (def = 3 (0,4)) Choice of impact parameter profile (+ free parameters)
+	allowRescatter: (def = off) allow rescattering of partons (not well tested)
+	rescatterMode: (def = 0, (0,4))
+PartonVertex:
+      >>setVertex: (def = off) Allow setting of partonic vertices
+	modeVertex: (def = 2, (1,2)) 1: proton profile is uniform black disk; 2: proton profile is 2D Gaussian
+      >>protonRadius: (def = 0.7, (0,10)) According to DIPSY model, at 14TeV proton radius ~ 0.7 fm
+      >>emissionWidth: (def = 0.1, (0,10)) Determines overall strength of the transverse space smearing
+	pTmin: (def = 0.2, (0.05,1)) Parton transverse smearing proportional to 1/pT, but pT limited to above pTmin to avoid unreasonable values
+Ropewalk:
+      >>RopeHadronization: (def = off) Swtich for all aspects of rope hadronisation. Note: few (or no?) tunes with rope hadronization (??)
+      >>doShoving: (def = off) Enable string shoving mechanism (with an interaction potential derived from the colour superconductor analogy)
+      >>doFlavour: (def = off) At hadronisation, colours at string endpoints and in gluon kinks can form a rope, which is hadronised with a larger string tension
+      >>r0: (def = 0.5, (0,10)) transverse radius of string in fm. Viewed as overall strength param. of rope hadronisation.
+      >>m0: (def = 0.2, (0.01,5))  Imposed lower mass cutoff to allow for calculation of rapidities of dipoles composed of massless gluons.
+   (shoving settings)
+      >>rCutOff: (def = 6, (0,100)) Max cut off radius at which strings stop interacting (to decrease computation time). No variation for values above def.
+      >>gAmplitude: (def = 5, (0,100)) Amplitude of shoving force. Min Bias/UE observables, transverse vars are sensitive. Changing gAmplitude requires retuning MPI
+      >>gExponent: (def = 1, (0,100)) Multiplies string radius in shoving force, allowing for variation between radius in rope flavour and shoving treatments
+      >>deltay: (def = 0.2, (0.01,10)) Width of rapidity slices in which event is split before shoving
+      >>tShove: (def = 1, (0,100)) Total shoving time in fm/c
+      >>deltat: (def = 0.1, (0.01,100)) Size of steps taken in time during shoving.
+      >>tInit: (def = 1.5, (0,100)) Strings allowed to propagate before shoving (fm/c).
+      >>limitMom: (def = on) switch off shoving for diploes with pT above pTcut.
+      >>pTcut: (def = 2.0, (0,1000)) value of pT at which shoving is turned off if limitMom is on
+   (flavour settings)
+      >>beta: (def = 0.2, (0,1)) detemines how much StringFlav:probQQtoQ scales with string tension (?)
+	setFixedKappa: (def=0ff) ignore generator spacetime info., using only a provided string tension, eg. or toy studies of hadronisation in dense environments
+        presetKappa: (def=0, (0,100)) Effective string tension calculation using string overlaps ignored. By setting setFixedKappa, presetKappa is used instead
+StringFlav:
+	kappa: (def = 0.2, (0,10)) (For use in rope flavour model) A based value of string tension to allow for studies of exotic quark production in rope model
+	probQQtoQ: (def =0.081, (0,1)) Suprpression of diquark production relative to quark production (ie. Baryon relative to meson)
+	(probStoUD, probSQtoQQ, probQQ1toQQ0, probQQ1toQQ0join)
+	mesonCvector: (def=0.88, (0,3)) relative prod. ratio vector/pseudoscalar for charm mesons (mesonUDvector, mesonSvector, mesonBvector)
+	BtoMratio: (def = 0.357, (0.1,10)) Ratio of rate of baryon to meson production (multiplies every baryon Clebsch-Gordan coef.)
+
+Parameters and properties of fragmentation functions available in StringZ, StringPT, StringFragmentation
+http://home.thep.lu.se/~torbjorn/pythia82html/Fragmentation.html

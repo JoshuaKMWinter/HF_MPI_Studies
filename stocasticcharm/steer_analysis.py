@@ -31,13 +31,13 @@ def steer_analysis(case):
     myan = Analyzer(data_param[case], case)
     do_distributions = True
     if do_distributions is True:
-        myan.plot()
+       # myan.plot()
         myan.hadron_ptratio()
-        myan.hadron_multiratio()
-        myan.plot_tunes()
+       # myan.hadron_multiratio()
+       # myan.plot_tunes()
 
 steer_analysis("Ds")
 steer_analysis("D0")
 steer_analysis("Lc")
-myplotter = Plotter()
-myplotter.plotcomparison()
+#myplotter = Plotter()
+#myplotter.plotcomparison()
