@@ -7,19 +7,32 @@
 
 using namespace Pythia8;
 
-int main() {
+int main(int argc, char* argv[]) {
 
 	//outfile for multiplicity analysis
 	//std::ofstream multfile; multfile.open("CSVs/NDs_multData.csv");
 	//multfile << "num_D,num_Dbar,num_Ds,num_Dsbar,num_lambdac,num_lambdacbar,D_leadpt,Ds_leadpt,Lc_leadpt,multiplicity\n";
 
+	char* outfile;
+
+	if (argc == 0) outfile = (char*)"CSVs/pThad_Data.csv";
+        else if (argc !=3) {cout<<"Wrong number of arguments. One output file and on pythia tune expected. Program stopped."<<endl; return(1);}
+        else {
+                outfile = argv[1];
+                ifstream is(argv[2]);
+                if (!is) {cout<<"Pythia tune not found! Program stopped."; return(1);}
+        }
+
 	//outfile for pt of all hadrons analysis
-	std::ofstream ptfile; ptfile.open("CSVs/pThad_Data_WithMPI_NoCR.csv");
+	std::ofstream ptfile; ptfile.open(outfile);
 	ptfile << "pt_had,multiplicity,hadron_pdg\n"; 
 
 	Pythia pythia;
 
-	pythia.readFile("../PythiaTunes/WithMPI_NoCR.cmnd");
+	if (argc == 3) {
+		pythia.readFile("../PythiaTunes/WithMPI_NoCR.cmnd");
+		cout<<"Reading Pythia Tune: "<<argv[2]<<endl;
+	}
 
 	pythia.readString("Beams:eCM = 13000.");
 	pythia.readString("HardQCD:hardccbar = on");

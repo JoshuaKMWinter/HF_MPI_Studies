@@ -83,23 +83,6 @@ class Analyzer:
         self.pthad_fileinput  = datap["pthad_fileinput"]
         self.multi_bins = datap["multi_bins"]
 
-#    def add_derived(self): #change this function so it can be applied to ANY dataframe
-#        if self.case == "D0" or "Ds" or "Lc":
-#            self.dfm["dphi_cc"] = Delta_Phi( self.dfm["c_phi"], self.dfm["cbar_phi"] )
-#            self.dfm["dphi_ccLO"] = Delta_Phi( self.dfm["cLO_phi"], self.dfm["cbarLO_phi"] )
-#            self.dfm["dphi_cchad"] = Delta_Phi( self.dfm["chad_phi"], self.dfm["cbarhad_phi"] )
-#            self.dfm["dphi_chad"] = Delta_Phi( self.dfm["c_phi"], self.dfm["chad_phi"] )
-#            self.dfm["dphi_cbarhad"] = Delta_Phi( self.dfm["cbar_phi"], self.dfm["cbarhad_phi"] )
-#            self.dfm["deta_cc"] = abs(self.dfm["c_eta"] - self.dfm["cbar_eta"])
-#            self.dfm["deta_ccLO"] = abs(self.dfm["cLO_eta"] - self.dfm["cbarLO_eta"])
-#            self.dfm["deta_cchad"] = abs(self.dfm["chad_eta"] - self.dfm["cbarhad_eta"])
-#            self.dfm["deta_chad"] = abs(self.dfm["c_eta"] - self.dfm["chad_eta"])
-#            self.dfm["deta_cbarhad"] = abs(self.dfm["cbar_eta"] - self.dfm["cbarhad_eta"])
-#            self.dfm["FFc"] = self.dfm["chad_pT"] / self.dfm["chad_ptcone"]
-#            self.dfm["FFcbar"] = self.dfm["cbarhad_pT"] / self.dfm["cbarhad_ptcone"]
-#            self.dfm["cLO_ptratio"] = self.dfm["cLO_pT"] / self.dfm["cbarLO_pT"]
-#            self.dfm["c_ptratio"] = self.dfm["c_pT"] / self.dfm["cbar_pT"]
-#            self.dfm["chad_ptratio"] = self.dfm["chad_pT"] / self.dfm["cbarhad_pT"]
     def add_derived(self,df): #change this function so it can be applied to ANY dataframe
         if self.case == "D0" or "Ds" or "Lc":
             df["dphi_cc"] = Delta_Phi( df["c_phi"], df["cbar_phi"] )

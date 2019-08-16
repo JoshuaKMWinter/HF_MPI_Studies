@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
 	Pythia pythia;
 	
 	//Tune of Pythia
-	if (argc ==2) {
+	if (argc == 3) {
 		pythia.readFile(argv[2]);
 		cout<<"Reading Pythia Tune: "<<argv[2]<<endl;
 	}
