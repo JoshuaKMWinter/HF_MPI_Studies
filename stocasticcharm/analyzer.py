@@ -18,7 +18,7 @@ from array import *
 import pandas as pd
 import pickle
 from root_numpy import fill_hist
-from ROOT import TFile, TH1F, TCanvas
+from ROOT import TFile, TH1F, TH2F, TCanvas, TPad
 from ROOT import gStyle, TLegend
 from ROOT import gROOT
 from ROOT import TStyle
@@ -39,6 +39,10 @@ def Find_Hist_Max(histlist):
     for i in range(len(histlist)):
         if histlist[i].GetMaximum() > hmax : hmax = histlist[i].GetMaximum()
     return hmax
+
+def Normalise(hist, area = 1):
+    norm = hist.GetEntries()
+    hist.Scale(1./norm)
 
 # pylint: disable=too-few-public-methods, too-many-instance-attributes, too-many-statements
 class Analyzer:
@@ -79,6 +83,15 @@ class Analyzer:
         self.xlab_tune_distr  = datap["xlab_tune_distr"]
         self.ylab_tune_distr  = datap["ylab_tune_distr"]
 
+        self.var_2d_distr   = datap["var_2d_distr"]
+        self.div_2d_distr   = datap["div_2d_distr"]
+        self.min_2d_distr   = datap["min_2d_distr"]
+        self.max_2d_distr   = datap["max_2d_distr"]
+        self.nbins_2d_distr = datap["nbins_2d_distr"]
+        self.title_2d_distr = datap["title_2d_distr"]
+        self.xlab_2d_distr  = datap["xlab_2d_distr"]
+        self.ylab_2d_distr  = datap["ylab_2d_distr"]
+
         self.dfpt = None
         self.pthad_fileinput  = datap["pthad_fileinput"]
         self.multi_bins = datap["multi_bins"]
@@ -100,7 +113,16 @@ class Analyzer:
             df["cLO_ptratio"] = df["cLO_pT"] / df["cbarLO_pT"]
             df["c_ptratio"] = df["c_pT"] / df["cbar_pT"]
             df["chad_ptratio"] = df["chad_pT"] / df["cbarhad_pT"]
-
+            df["dR_d1"]    = Delta_R(df["d1_phi"],   df["d1_eta"]   ,df["chad_phi"],   df["chad_eta"]   )
+            df["dR_d1bar"] = Delta_R(df["d1bar_phi"],df["d1bar_eta"],df["cbarhad_phi"],df["cbarhad_eta"])
+            df["dR_d2"]    = Delta_R(df["d2_phi"],   df["d2_eta"]   ,df["cbarhad_phi"],df["cbarhad_eta"])
+            df["dR_d2bar"] = Delta_R(df["d2bar_phi"],df["d2bar_eta"],df["chad_phi"],   df["chad_eta"]   )
+        if 'd3_phi' in df:
+            df["dR_d3"]    = Delta_R(df["d3_phi"],   df["d3_eta"]   ,df["chad_phi"],df["chad_eta"])
+            df["dR_d3bar"] = Delta_R(df["d3bar_phi"],df["d3bar_eta"],df["chad_phi"],df["chad_eta"])
+            df["dR_d4"]    = Delta_R(df["d4_phi"],   df["d4_eta"]   ,df["cbarhad_phi"],df["cbarhad_eta"])
+            df["dR_d4bar"] = Delta_R(df["d4bar_phi"],df["d4bar_eta"],df["cbarhad_phi"],df["cbarhad_eta"])
+            
     def plot(self):
         print("Running analyzer")
         
@@ -275,7 +297,7 @@ class Analyzer:
         legend.Draw()
         c.SaveAs("plots/TuneComparison/%s/c_%s_multiratio.eps" % (self.case, self.case))
 
-    def plot_tunes(self):
+    def plot_tunes(self, norm = False):
         print("plotting tunes of Pythia")
         
         for index in range(len(self.var_tune_distr)):
@@ -296,6 +318,7 @@ class Analyzer:
                     hist.SetYTitle(self.ylab_tune_distr[index])
                     hist.SetStats(0)
                     fill_hist(hist, dftune[self.var_tune_distr[index][i]])
+                    if norm == True: Normalise(hist)
                     histlist[i].append(hist)
             c = TCanvas('c_'+self.var_tune_distr[index][0],'',600*len(self.var_tune_distr[index]),600)
             c.Divide(len(histlist))
@@ -311,3 +334,31 @@ class Analyzer:
                     else: histlist[icanv][ihist].Draw("SAME")
                 legend.Draw()
             c.SaveAs("plots/TuneComparison/%s/c_%s_%s.eps" % (self.case, self.case, self.var_tune_distr[index][0]))
+
+    def plot2d(self):
+        for ifile in range(len(self.tune_fileinput)):
+            df2d = pd.read_csv(self.tune_fileinput[ifile])
+            self.add_derived(df2d)
+            for icanv in range(len(self.var_2d_distr)):
+                c = TCanvas('c_'+self.case+'_'+self.var_2d_distr[icanv][0][0]+'_vs_'+self.var_2d_distr[icanv][0][1],
+                            'c_'+self.case+'_'+self.var_2d_distr[icanv][0][0]+'_vs_'+self.var_2d_distr[icanv][0][1],
+                            600*self.div_2d_distr[icanv][0],600*self.div_2d_distr[icanv][1])
+                c.Divide(self.div_2d_distr[icanv][0], self.div_2d_distr[icanv][1])
+                histlist = []
+                for isub in range(len(self.var_2d_distr[icanv])):
+                    hist2d = TH2F('h_'+self.case+'_'+self.var_2d_distr[icanv][isub][0]+'_vs_'+self.var_2d_distr[icanv][isub][1],
+                                  'h_'+self.case+'_'+self.var_2d_distr[icanv][isub][0]+'_vs_'+self.var_2d_distr[icanv][isub][1],
+                                  self.nbins_2d_distr[icanv][isub][0], self.min_2d_distr[icanv][isub][0], self.max_2d_distr[icanv][isub][0],
+                                  self.nbins_2d_distr[icanv][isub][1], self.min_2d_distr[icanv][isub][1], self.max_2d_distr[icanv][isub][1])
+                    hist2d.SetTitle(self.title_2d_distr[icanv][isub])
+                    hist2d.SetXTitle(self.xlab_2d_distr[icanv][isub])
+                    hist2d.SetYTitle(self.ylab_2d_distr[icanv][isub])
+                    hist2d.SetStats(0)
+
+                    fill_hist(hist2d, df2d[[ self.var_2d_distr[icanv][isub][0], self.var_2d_distr[icanv][isub][1] ]])
+                    histlist.append(hist2d)
+                for ihist in range(len(histlist)):
+                    pad = c.cd(ihist+1)
+                    pad.SetLogz()
+                    histlist[ihist].Draw("colz")
+                c.SaveAs("plots/%s/%s/%s.eps" % (self.leg_tune_distr[ifile], self.case, c.GetName()))

@@ -59,6 +59,33 @@ Ds:
   leg_tune_distr: ['Default', 'NoCR', 'MoreQCDBased', 'MPIBased', 'Ropes', 'RopesShoving']
 
   colours: [4, 2, 1, 3, 6, 7]
+
+  var_2d_distr: [ [[chad_pT, d1_pT], [chad_pT, d3_pT], [chad_pT, d3bar_pT], [cbarhad_pT, d1bar_pT], [cbarhad_pT, d4bar_pT], [cbarhad_pT, d4_pT]], 
+         [[chad_cone_mult, dR_d1], [chad_cone_mult, dR_d3], [chad_cone_mult, dR_d3bar], [cbarhad_cone_mult, dR_d1bar], [cbarhad_cone_mult, dR_d4bar], [cbarhad_cone_mult, dR_d4]], 
+         [[chad_pT, dR_d1], [chad_pT, dR_d3], [chad_pT, dR_d3bar], [cbarhad_pT, dR_d1bar], [cbarhad_pT, dR_d4bar], [cbarhad_pT, dR_d4]],
+         [[chad_pT, chad_cone_mult], [chad_pT, multiplicity], [cbarhad_pT, cbarhad_cone_mult], [cbarhad_pT, multiplicity]] ]
+  div_2d_distr: [ [3,2], [3,2], [3,2], [2,2] ]
+  title_2d_distr: [ ['p_{T} #pi^{+} vs p_{T} D_{s}^{+}', 'p_{T} K^{+} vs p_{T} D_{s}^{+}', 'p_{T} K^{-} vs p_{T} D_{s}^{+}',
+                     'p_{T} #pi^{-} vs p_{T} D_{s}^{-}', 'p_{T} K^{-} vs p_{T} D_{s}^{-}', 'p_{T} K^{+} vs p_{T} D_{s}^{-}'],
+              ['#DeltaR(D_{s}^{+},#pi^{+}) vs D_{s}^{+} cone multiplicity', '#DeltaR(D_{s}^{+},K^{+}) vs D_{s}^{+} cone multiplicity', '#DeltaR(D_{s}^{+},K^{-}) vs D_{s}^{+} cone multiplicity',
+               '#DeltaR(D_{s}^{-},#pi^{-}) vs D_{s}^{-} cone multiplicity', '#DeltaR(D_{s}^{-},K^{-}) vs D_{s}^{-} cone multiplicity', '#DeltaR(D_{s}^{-},K^{+}) vs D_{s}^{-} cone multiplicity'],
+              ['#DeltaR(D_{s}^{+},#pi^{+}) vs p_{T} D_{s}^{+}', '#DeltaR(D_{s}^{+},K^{+}) vs p_{T} D_{s}^{+}', '#DeltaR(D_{s}^{+},K^{-}) vs p_{T} D_{s}^{+}',
+               '#DeltaR(D_{s}^{-},#pi^{-}) vs p_{T} D_{s}^{-}', '#DeltaR(D_{s}^{-},K^{-}) vs p_{T} D_{s}^{-}', '#DeltaR(D_{s}^{-},K^{+}) vs p_{T} D_{s}^{-}'],
+              ['D_{s}^{+} cone multiplicity vs p_{T} D_{s}^{+}', 'Event multiplicity vs p_{T} D_{s}^{-}', 'D_{s}^{-} cone multiplicity vs p_{T} D_{s}^{-}', 'Event multiplicity vs p_{T} D_{s}^{-}']]
+  nbins_2d_distr: [ [[15,10], [15,10], [15,10], [15,10], [15,10], [15,10]], 
+              [[15,16], [15,16], [15,16], [15,16], [15,16], [15,16]],
+              [[15,16], [15,16], [15,16], [15,16], [15,16], [15,16]],
+              [[15,15], [15,20], [15,15], [15,20]] ]
+  min_2d_distr: [[[0,0], [0,0], [0,0], [0,0], [0,0], [0,0]], [[0,0], [0,0], [0,0], [0,0], [0,0], [0,0]], [[0,0], [0,0], [0,0], [0,0], [0,0], [0,0]], [[0,0],[0,0],[0,0],[0,0]]]
+  max_2d_distr: [[[30,10], [30,10], [30,10], [30,10], [30,10], [30,10]], [[30,8], [30,8], [30,8], [30,8], [30,8],[30,8]], [[30,8],[30,8],[30,8],[30,8],[30,8],[30,8]], [[30,30],[30,500],[30,30],[30,500]]]  
+  xlab_2d_distr: [['p_{T} D_{s}^{+} (GeV)', 'p_{T} D_{s}^{+} (GeV)', 'p_{T} D_{s}^{+} (GeV)', 'p_{T} D_{s}^{-} (GeV)', 'p_{T} D_{s}^{-} (GeV)', 'p_{T} D_{s}^{-} (GeV)'],
+            ['# final particles (R<0.7)', '# final particles (R<0.7)', '# final particles (R<0.7)', '# final particles (R<0.7)', '# final particles (R<0.7)', '# final particles (R<0.7)'],
+            ['p_{T} D_{s}^{+} (GeV)', 'p_{T} D_{s}^{+} (GeV)', 'p_{T} D_{s}^{+} (GeV)', 'p_{T} D_{s}^{-} (GeV)', 'p_{T} D_{s}^{-} (GeV)', 'p_{T} D_{s}^{-} (GeV)'],
+            ['p_{T} D_{s}^{+} (GeV)', 'p_{T} D_{s}^{+} (GeV)', 'p_{T} D_{s}^{-} (GeV)', 'p_{T} D_{s}^{-} (GeV)']] 
+  ylab_2d_distr: [['p_{T} #pi^{+} (GeV)', 'p_{T} K^{+} (GeV)', 'p_{T} K^{-} (GeV)', 'p_{T} #pi^{-} (GeV)', 'p_{T} K^{-} (GeV)', 'p_{T} K^{+} (GeV)'],
+            ['#DeltaR(D_{s}^{+},#pi^{+})', '#DeltaR(D_{s}^{+},K^{+})', '#DeltaR(D_{s}^{+},K^{-})', '#DeltaR(D_{s}^{-},#pi^{-})', '#DeltaR(D_{s}^{-},K^{-})', '#DeltaR(D_{s}^{-},K^{+})'],
+            ['#DeltaR(D_{s}^{+},#pi^{+})', '#DeltaR(D_{s}^{+},K^{+})', '#DeltaR(D_{s}^{+},K^{-})', '#DeltaR(D_{s}^{-},#pi^{-})', '#DeltaR(D_{s}^{-},K^{-})', '#DeltaR(D_{s}^{-},K^{+})'],
+            ['# final particles (R<0.7)', '# final particles', '# final particles (R<0.7)',  '# final particles'] ] 
   
   pthad_fileinput: [../input/pThad_Data.csv, ../input/pThad_Data_WithMPI_NoCR.csv, ../input/pThad_Data_WithMPI_MoreQCDBased.csv, ../input/pThad_Data_WithMPI_MPIBased.csv, ../input/pThad_Data_WithMPI_Ropes.csv, ../input/pThad_Data_WithMPI_RopesShoving.csv]
   multi_bins: [0,100,300] 
@@ -110,6 +137,33 @@ D0:
   leg_tune_distr: ['Default', 'NoCR', 'MoreQCDBased', 'MPIBased', 'Ropes', 'RopesShoving']
 
   colours: [4, 2, 1, 3, 6, 7]
+
+  var_2d_distr: [ [[chad_pT, d1_pT], [chad_pT, d2bar_pT], [cbarhad_pT, d1bar_pT], [cbarhad_pT, d2_pT]], 
+         [[chad_cone_mult, dR_d1], [chad_cone_mult, dR_d2bar], [cbarhad_cone_mult, dR_d1bar], [cbarhad_cone_mult, dR_d2]], 
+         [[chad_pT, dR_d1], [chad_pT, dR_d2bar], [cbarhad_pT, dR_d1bar], [cbarhad_pT, dR_d2]],
+         [[chad_pT, chad_cone_mult], [chad_pT, multiplicity], [cbarhad_pT, cbarhad_cone_mult], [cbarhad_pT, multiplicity]] ]
+  div_2d_distr: [ [2,2], [2,2], [2,2], [2,2] ]
+  title_2d_distr: [ ['p_{T} #pi^{+} vs p_{T} D^{0}', 'p_{T} K^{-} vs p_{T} D^{0}',
+               'p_{T} #pi^{-} vs p_{T} #bar{D^{0}}', 'p_{T} K^{+} vs p_{T} #bar{D^{0}}'],
+              ['#DeltaR(D^{0},#pi^{+}) vs D^{0} cone multiplicity', '#DeltaR(D^{0},K^{-}) vs D^{0} cone multiplicity',
+               '#DeltaR(#bar{D^{0}},#pi^{-}) vs #bar{D^{0}} cone multiplicity', '#DeltaR(#bar{D^{0}},K^{+}) vs #bar{D^{0}} cone multiplicity'],
+              ['#DeltaR(D^{0},#pi^{+}) vs p_{T} D^{0}', '#DeltaR(D^{0},K^{-}) vs p_{T} D^{0}',
+               '#DeltaR(#bar{D^{0}},#pi^{-}) vs p_{T} #bar{D^{0}}', '#DeltaR(#bar{D^{0}},K^{+}) vs p_{T} #bar{D^{0}}'],
+              ['D^{0} cone multiplicity vs p_{T} D^{0}', 'Event multiplicity vs p_{T} D^{0}', '#bar{D^{0}} cone multiplicity vs p_{T} #bar{D^{0}}', 'Event multiplicity vs p_{T} #bar{D^{0}}']]
+  nbins_2d_distr: [ [[15,10], [15,10], [15,10], [15,10]], 
+              [[15,16], [15,16], [15,16], [15,16]],
+              [[15,16], [15,16], [15,16], [15,16]],
+              [[15,15], [15,20], [15,15], [15,20]] ]
+  min_2d_distr: [[[0,0], [0,0], [0,0], [0,0]], [[0,0], [0,0], [0,0], [0,0]], [[0,0], [0,0], [0,0], [0,0]], [[0,0], [0,0], [0,0], [0,0]] ]
+  max_2d_distr: [[[30,10], [30,10], [30,10], [30,10]], [[30,8], [30,8], [30,8], [30,8]], [[30,8], [30,8], [30,8], [30,8]], [[30,30],[30,500],[30,30],[30,500]]]  
+  xlab_2d_distr: [['p_{T} D^{0} (GeV)', 'p_{T} D^{0} (GeV)', 'p_{T} bar{D^{0}} (GeV)', 'p_{T} #bar{D^{0}} (GeV)'],
+            ['# final particles (R<0.7)', '# final particles (R<0.7)', '# final particles (R<0.7)', '# final particles (R<0.7)'],
+            ['p_{T} D^{0} (GeV)', 'p_{T} D^{0} (GeV)', 'p_{T} #bar{D^{0}} (GeV)', 'p_{T} bar{D^{0}} (GeV)'], 
+            ['p_{T} D^{0} (GeV)', 'p_{T} D^{0} (GeV)', 'p_{T} #bar{D^{0}} (GeV)', 'p_{T} bar{D^{0}} (GeV)']] 
+  ylab_2d_distr: [['p_{T} #pi^{+} (GeV)',  'p_{T} K^{-} (GeV)', 'p_{T} #pi^{-} (GeV)', 'p_{T} K^{+} (GeV)'],
+            ['#DeltaR(D^{0},#pi^{+})', '#DeltaR(D^{0},K^{-})', '#DeltaR(#bar{D^{0}},#pi^{-})', '#DeltaR(#bar{D^{0}},K^{+})'],
+            ['#DeltaR(D^{0},#pi^{+})', '#DeltaR(D^{0},K^{-})', '#DeltaR(#bar{D^{0}},#pi^{-})', '#DeltaR(#bar{D^{0}},K^{+})'],
+            ['# final particles (R<0.7)', '# final particles', '# final particles (R<0.7)', '# final particles']] 
   
   pthad_fileinput: [../input/pThad_Data.csv, ../input/pThad_Data_WithMPI_NoCR.csv, ../input/pThad_Data_WithMPI_MoreQCDBased.csv, ../input/pThad_Data_WithMPI_MPIBased.csv, ../input/pThad_Data_WithMPI_Ropes.csv, ../input/pThad_Data_WithMPI_RopesShoving.csv]
   multi_bins: [0,100,300] 
@@ -148,7 +202,7 @@ Lc:
             ../input/Lc_EventData_WithMPI_MPIBased.csv, ../input/Lc_EventData_WithMPI_Ropes.csv, ../input/Lc_EventData_WithMPI_RopesShoving.csv]
   var_tune_distr: [ [cLO_pT, c_pT, chad_pT], [FFc], [multiplicity], [chad_cone_mult], [c_ptratio, chad_ptratio], 
                  [dphi_cc, dphi_cchad], [deta_ccLO, deta_cc, deta_cchad], [dphi_chad], [deta_chad], [chad_ptcone]]
-  nbins_tune_distr: [19, 30, 50, 35, 25, 16, 20, 16, 20, 30]
+  nbins_tune_distr: [10, 10, 20, 18, 13, 8, 10, 8, 10, 15]
   min_tune_distr: [0,0,0,0,0,0,0,0,0,0]
   max_tune_distr: [38, 3, 500, 35, 5, 3.2, 7, 3.2, 7, 15]
   title_tune_distr: [ ['Charm Transverse Momentum (LO)', 'Charm Transverse Momentum (prior to hadronisation)', 'Charmed Hadron Transverse Momentum'], ['Charmed Hadron Fragmentation Distribution'],
@@ -162,6 +216,34 @@ Lc:
   leg_tune_distr: ['Default', 'NoCR', 'MoreQCDBased', 'MPIBased', 'Ropes', 'RopesShoving']
 
   colours: [4, 2, 1, 3, 6, 7]
+
+  var_2d_distr: [ [[chad_pT, d1_pT], [chad_pT, d3_pT], [chad_pT, d3bar_pT], [cbarhad_pT, d1bar_pT], [cbarhad_pT, d4bar_pT], [cbarhad_pT, d4_pT]], 
+         [[chad_cone_mult, dR_d1], [chad_cone_mult, dR_d3], [chad_cone_mult, dR_d3bar], [cbarhad_cone_mult, dR_d1bar], [cbarhad_cone_mult, dR_d4bar], [cbarhad_cone_mult, dR_d4]], 
+         [[chad_pT, dR_d1], [chad_pT, dR_d3], [chad_pT, dR_d3bar], [cbarhad_pT, dR_d1bar], [cbarhad_pT, dR_d4bar], [cbarhad_pT, dR_d4]], 
+         [[chad_pT, chad_cone_mult], [chad_pT, multiplicity], [cbarhad_pT, cbarhad_cone_mult], [cbarhad_pT, multiplicity]] ]
+  div_2d_distr: [ [3,2], [3,2], [3,2], [2,2] ]
+  title_2d_distr: [ ['p_{T} p vs p_{T} #Lambda_{c}^{+}', 'p_{T} #pi^{+} vs p_{T} #Lambda_{c}^{+}', 'p_{T} #pi^{-} vs p_{T} #Lambda_{c}^{+}',
+               'p_{T} #bar{p} vs p_{T} #Lambda_{c}^{-}', 'p_{T} #pi^{-} vs p_{T} #Lambda_{c}^{-}', 'p_{T} #pi^{+} vs p_{T} #Lambda_{c}^{-}'],
+              ['#DeltaR(#Lambda_{c}^{+},p) vs #Lambda_{c}^{+} cone multiplicity', '#DeltaR(#Lambda_{c}^{+},#pi^{+}) vs #Lambda_{c}^{+} cone multiplicity', '#DeltaR(#Lambda_{c}^{+},#pi^{-}) vs #Lambda_{c}^{+} cone multiplicity',
+               '#DeltaR(#Lambda_{c}^{-},#bar{p}) vs #Lambda_{c}^{-} cone multiplicity', '#DeltaR(#Lambda_{c}^{-},#pi^{-}) vs #Lambda_{c}^{-} cone multiplicity', '#DeltaR(#Lambda_{c}^{-},#pi^{+}) vs #Lambda_{c}^{-} cone multiplicity'],
+              ['#DeltaR(#Lambda_{c}^{+},p) vs p_{T} #Lambda_{c}^{+}',       '#DeltaR(#Lambda_{c}^{+},#pi^{+}) vs p_{T} #Lambda_{c}^{+}', '#DeltaR(#Lambda_{c}^{+},#pi^{-}) vs p_{T} #Lambda_{c}^{+}',
+               '#DeltaR(#Lambda_{c}^{-},#bar{p}) vs p_{T} #Lambda_{c}^{-}', '#DeltaR(#Lambda_{c}^{-},#pi^{-}) vs p_{T} #Lambda_{c}^{-}', '#DeltaR(#Lambda_{c}^{-},#pi^{+}) vs p_{T} #Lambda_{c}^{-}'],
+              ['#Lambda_{c}^{+} cone multiplicity vs p_{T} #Lambda_{c}^{+}', 'Event multiplicity vs p_{T} #Lambda_{c}^{-}', '#Lambda_{c}^{-} cone multiplicity vs p_{T} #Lambda_{c}^{-}', 'Event multiplicity vs p_{T} #Lambda_{c}^{-}']]
+  nbins_2d_distr: [ [[15,10], [15,10], [15,10], [15,10], [15,10], [15,10]], 
+              [[15,16], [15,16], [15,16], [15,16], [15,16], [15,16]],
+              [[15,16], [15,16], [15,16], [15,16], [15,16], [15,16]],
+              [[15,15], [15,20], [15,15], [15,20]] ]
+  min_2d_distr: [[[0,0], [0,0], [0,0], [0,0], [0,0], [0,0]], [[0,0], [0,0], [0,0], [0,0], [0,0], [0,0]], [[0,0], [0,0], [0,0], [0,0], [0,0], [0,0]], [[0,0], [0,0], [0,0], [0,0]]]
+  max_2d_distr: [[[30,10], [30,10], [30,10], [30,10], [30,10], [30,10]], [[30,8],[30,8],[30,8],[30,8],[30,8],[30,8]], [[30,8],[30,8],[30,8],[30,8],[30,8],[30,8]], [[30,30],[30,500],[30,30],[30,500]]]  
+  xlab_2d_distr: [['p_{T} #Lambda_{c}^{+} (GeV)', 'p_{T} #Lambda_{c}^{+} (GeV)', 'p_{T} #Lambda_{c}^{+} (GeV)', 'p_{T} #Lambda_{c}^{-} (GeV)', 'p_{T} #Lambda_{c}^{-} (GeV)','p_{T} #Lambda_{c}^{-} (GeV)'],
+            ['# final particles (R<0.7)', '# final particles (R<0.7)', '# final particles (R<0.7)', '# final particles (R<0.7)', '# final particles (R<0.7)', '# final particles (R<0.7)'],
+            ['p_{T} #Lambda_{c}^{+} (GeV)', 'p_{T} #Lambda_{c}^{+} (GeV)', 'p_{T} #Lambda_{c}^{+} (GeV)', 'p_{T} #Lambda_{c}^{-} (GeV)', 'p_{T} #Lambda_{c}^{-} (GeV)','p_{T} #Lambda_{c}^{-} (GeV)'],
+            ['p_{T} #Lambda_{c}^{+} (GeV)', 'p_{T} #Lambda_{c}^{+} (GeV)', 'p_{T} #Lambda_{c}^{-} (GeV)', 'p_{T} #Lambda_{c}^{-} (GeV)']] 
+  ylab_2d_distr: [['p_{T} p (GeV)', 'p_{T} #pi^{+} (GeV)', 'p_{T} #pi^{-} (GeV)', 'p_{T} #bar{p} (GeV)', 'p_{T} #pi^{-} (GeV)', 'p_{T} #pi^{+} (GeV)'],
+            ['#DeltaR(#Lambda_{c}^{+},p)', '#DeltaR(#Lambda_{c}^{+},#pi^{+})', '#DeltaR(#Lambda_{c}^{+},#pi^{-})', '#DeltaR(#Lambda_{c}^{-},#bar{p})', '#DeltaR(#Lambda_{c}^{-},#pi^{-})', '#DeltaR(#Lambda_{c}^{-},#pi^{+})'],
+            ['#DeltaR(#Lambda_{c}^{+},p)', '#DeltaR(#Lambda_{c}^{+},#pi^{+})', '#DeltaR(#Lambda_{c}^{+},#pi^{-})', '#DeltaR(#Lambda_{c}^{-},#bar{p})', '#DeltaR(#Lambda_{c}^{-},#pi^{-})', '#DeltaR(#Lambda_{c}^{-},#pi^{+})'],
+            ['# final particles (R<0.7)', '# final particles', '# final particles (R<0.7)', '# final particles']] 
+
   
   pthad_fileinput: [../input/pThad_Data.csv, ../input/pThad_Data_WithMPI_NoCR.csv, ../input/pThad_Data_WithMPI_MoreQCDBased.csv, ../input/pThad_Data_WithMPI_MPIBased.csv, ../input/pThad_Data_WithMPI_Ropes.csv, ../input/pThad_Data_WithMPI_RopesShoving.csv]
   multi_bins: [0,100,300] 
