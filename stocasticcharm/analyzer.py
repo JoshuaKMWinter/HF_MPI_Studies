@@ -224,7 +224,7 @@ class Analyzer:
             dfD0 = self.dfpt[self.dfpt.hadron_pdg == 421]
             dfhad = self.dfpt[self.dfpt.hadron_pdg == self.pdg]
 
-            pt_bins = [0,1,2,3,5,10,20,50]
+            pt_bins = [0,1,2,3,4,5,6,8,12,24]
             
             for i in range(len(self.multi_bins)):
                 titlestr = ''
@@ -236,8 +236,8 @@ class Analyzer:
                     dfD0sel  =  dfD0[dfD0.multiplicity >=  self.multi_bins[i]]
                     dfhadsel = dfhad[dfhad.multiplicity >= self.multi_bins[i]]
                     titlestr = "multiplicity >=" + str(self.multi_bins[i])
-                h_D0 = TH1F("h_base_pt_multbin"+str(i)+"_"+self.leg_tune_distr[ifile],"h_base_pt_multbin"+str(i)+"_"+self.leg_tune_distr[ifile],7,array('d',pt_bins))
-                h_had = TH1F("h_"+self.case+"_pt_multbin"+str(i)+"_"+self.leg_tune_distr[ifile],"h_"+self.case+"_pt_multbin"+str(i)+"_"+self.leg_tune_distr[ifile],7,array('d',pt_bins))
+                h_D0 = TH1F("h_base_pt_multbin"+str(i)+"_"+self.leg_tune_distr[ifile],"h_base_pt_multbin"+str(i)+"_"+self.leg_tune_distr[ifile],9,array('d',pt_bins))
+                h_had = TH1F("h_"+self.case+"_pt_multbin"+str(i)+"_"+self.leg_tune_distr[ifile],"h_"+self.case+"_pt_multbin"+str(i)+"_"+self.leg_tune_distr[ifile],9,array('d',pt_bins))
                 h_D0.Sumw2()
                 h_had.Sumw2()
                 fill_hist(h_D0, dfD0sel['pt_had'])
@@ -256,7 +256,9 @@ class Analyzer:
             for ihist in range(len(histlist[icanv])):
                 legend.AddEntry(histlist[icanv][ihist], self.leg_tune_distr[ihist])
                 if ihist == 0:
-                    histlist[icanv][ihist].SetMaximum(hmax*1.3)
+                    if self.case == 'Lc': histlist[icanv][ihist].SetMaximum(0.2)
+                    if self.case == 'Ds': histlist[icanv][ihist].SetMaximum(0.4)
+                    histlist[icanv][ihist].SetMinimum(0)
                     histlist[icanv][ihist].Draw()
                 else: histlist[icanv][ihist].Draw("SAME")
             legend.Draw()
@@ -274,7 +276,7 @@ class Analyzer:
             multibins = self.multi_bins
             multibins.append(1000)
 
-            h_D0 = TH1F("h_D0"+"_"+self.leg_tune_distr[ifile]+"_multiratio","h_D0_multiratio",3,array('d',multibins))
+            h_D0 = TH1F("h_base"+"_"+self.leg_tune_distr[ifile]+"_multiratio","h_D0_multiratio",3,array('d',multibins))
             h_had = TH1F("h_"+self.case+"_"+self.leg_tune_distr[ifile]+"_multiratio","h_"+self.case+"_"+self.leg_tune_distr[ifile]+"_multiratio",3,array('d',multibins))
             h_D0.Sumw2()
             h_had.Sumw2()
@@ -335,7 +337,7 @@ class Analyzer:
                 legend.Draw()
             c.SaveAs("plots/TuneComparison/%s/c_%s_%s.eps" % (self.case, self.case, self.var_tune_distr[index][0]))
 
-    def plot2d(self):
+    def plot2d(self, logz = False):
         for ifile in range(len(self.tune_fileinput)):
             df2d = pd.read_csv(self.tune_fileinput[ifile])
             self.add_derived(df2d)
@@ -359,6 +361,6 @@ class Analyzer:
                     histlist.append(hist2d)
                 for ihist in range(len(histlist)):
                     pad = c.cd(ihist+1)
-                    pad.SetLogz()
+                    if logz : pad.SetLogz()
                     histlist[ihist].Draw("colz")
                 c.SaveAs("plots/%s/%s/%s.eps" % (self.leg_tune_distr[ifile], self.case, c.GetName()))
