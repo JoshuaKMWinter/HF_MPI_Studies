@@ -42,7 +42,17 @@ def Find_Hist_Max(histlist):
 
 def Normalise(hist, area = 1):
     norm = hist.GetEntries()
-    hist.Scale(1./norm)
+    if norm != 0: hist.Scale(area/norm)
+    else: print("WARNING: "+hist.GetName()+" has no entries. Cannot be normalised.")
+
+def Rapidity_Range(df, rapmin, rapmax):
+    if "chad_eta" in df.columns:
+        dfcut = df[np.logical_and(df["chad_eta"] > rapmin, df["chad_eta"] < rapmax)]
+        dfcut = dfcut[np.logical_and(df["cbarhad_eta"] > rapmin, df["cbarhad_eta"] < rapmax)] 
+    elif "rapidity" in df.columns:
+        dfcut = df[np.logical_and(df["rapidity"] > rapmin, df["rapidity"] < rapmax)]
+        dfcut = dfcut[np.logical_and(df["rapidity"] > rapmin, df["rapidity"] < rapmax)] 
+    return dfcut
 
 # pylint: disable=too-few-public-methods, too-many-instance-attributes, too-many-statements
 class Analyzer:
@@ -108,8 +118,10 @@ class Analyzer:
             df["deta_cchad"] = abs(df["chad_eta"] - df["cbarhad_eta"])
             df["deta_chad"] = abs(df["c_eta"] - df["chad_eta"])
             df["deta_cbarhad"] = abs(df["cbar_eta"] - df["cbarhad_eta"])
-            df["FFc"] = df["chad_pT"] / df["chad_ptcone"]
-            df["FFcbar"] = df["cbarhad_pT"] / df["cbarhad_ptcone"]
+            df["FFchad"] = df["chad_pT"] / df["chad_ptcone"]
+            df["FFchadbar"] = df["cbarhad_pT"] / df["cbarhad_ptcone"]
+            df["FFc"] = df["chad_pT"] / df["c_pT"]
+            df["FFcbar"] = df["cbarhad_pT"] / df["cbar_pT"]
             df["cLO_ptratio"] = df["cLO_pT"] / df["cbarLO_pT"]
             df["c_ptratio"] = df["c_pT"] / df["cbar_pT"]
             df["chad_ptratio"] = df["chad_pT"] / df["cbarhad_pT"]
@@ -123,7 +135,7 @@ class Analyzer:
             df["dR_d4"]    = Delta_R(df["d4_phi"],   df["d4_eta"]   ,df["cbarhad_phi"],df["cbarhad_eta"])
             df["dR_d4bar"] = Delta_R(df["d4bar_phi"],df["d4bar_eta"],df["cbarhad_phi"],df["cbarhad_eta"])
             
-    def plot(self):
+    def plot(self, rapiditycut = False):
         print("Running analyzer")
         
         for ifile in range(len(self.tune_fileinput)):
@@ -132,7 +144,8 @@ class Analyzer:
             self.dfm = pd.read_csv(self.tune_fileinput[ifile])
             self.add_derived(self.dfm)
             dfsel = self.dfm.query(self.sel_1d_ptchad)
-            
+            if rapiditycut: dfsel = Rapidity_Range(dfsel, self.rapiditymin, self.rapiditymax)
+
             for index in range(self.n_1d):    
                 c = TCanvas('c_'+self.var_1d_distr[index][0],'',600,600)
                 legend = TLegend(.7,.75,.9,.9)
@@ -214,7 +227,7 @@ class Analyzer:
 #            legend.Draw()
 #            c.SaveAs("plots/%s/%s/c_%spt_over_D0pt.eps" % (self.leg_tune_distr[ifile], self.case, self.case))
 
-    def hadron_ptratio(self):
+    def hadron_ptratio(self, rapiditycut = False):
         c = TCanvas('c_'+self.case+'pt_over_D0pt','',600*len(self.multi_bins),600)
         c.Divide(len(self.multi_bins))
         histlist = [ [] for x in range(len(self.multi_bins)) ]
@@ -223,6 +236,9 @@ class Analyzer:
             
             dfD0 = self.dfpt[self.dfpt.hadron_pdg == 421]
             dfhad = self.dfpt[self.dfpt.hadron_pdg == self.pdg]
+            if rapiditycut: 
+                dfD0 = Rapidity_Range(dfD0, self.rapiditymin, self.rapiditymax)
+                dfhad = Rapidity_Range(dfhad, self.rapiditymin, self.rapiditymax)
 
             pt_bins = [0,1,2,3,4,5,6,8,12,24]
             
@@ -264,7 +280,7 @@ class Analyzer:
             legend.Draw()
         c.SaveAs("plots/TuneComparison/%s/c_%spt_over_D0pt.eps" % (self.case, self.case))
 
-    def hadron_multiratio(self):
+    def hadron_multiratio(self, rapiditycut = False):
         c = TCanvas('c_'+self.case+'_multiratio','',600,600)
         histlist = [] 
         legend = TLegend(.7,.75,.9,.9)
@@ -273,6 +289,9 @@ class Analyzer:
 
             dfD0 = self.dfpt[self.dfpt.hadron_pdg == 421]
             dfhad = self.dfpt[self.dfpt.hadron_pdg == self.pdg]
+            if rapiditycut: 
+                dfD0 = Rapidity_Range(dfD0, self.rapiditymin, self.rapiditymax)
+                dfhad = Rapidity_Range(dfhad, self.rapiditymin, self.rapiditymax)
             multibins = self.multi_bins
             multibins.append(1000)
 
@@ -299,14 +318,16 @@ class Analyzer:
         legend.Draw()
         c.SaveAs("plots/TuneComparison/%s/c_%s_multiratio.eps" % (self.case, self.case))
 
-    def plot_tunes(self, norm = False):
+    def plot_tunes(self, rapiditycut = False ,norm = False):
         print("plotting tunes of Pythia")
         
         for index in range(len(self.var_tune_distr)):
             histlist = [ [] for x in range(len(self.var_tune_distr[index])) ]
             for ifile in range(len(self.tune_fileinput)):
                 dftune = pd.read_csv(self.tune_fileinput[ifile])
+                if rapiditycut: dftune = Rapidity_Range(dftune, self.rapiditymin, self.rapiditymax)
                 self.add_derived(dftune)
+                
                 for i in range(len(self.var_tune_distr[index])):
                     hist = TH1F("h_"+self.leg_tune_distr[ifile]+"_"+self.var_tune_distr[index][i],
                             "h_"+self.leg_tune_distr[ifile]+"_"+self.var_tune_distr[index][i],
@@ -337,9 +358,10 @@ class Analyzer:
                 legend.Draw()
             c.SaveAs("plots/TuneComparison/%s/c_%s_%s.eps" % (self.case, self.case, self.var_tune_distr[index][0]))
 
-    def plot2d(self, logz = False):
+    def plot2d(self, rapiditycut = False, logz = False):
         for ifile in range(len(self.tune_fileinput)):
             df2d = pd.read_csv(self.tune_fileinput[ifile])
+            if rapiditycut: df2d = Rapidity_Range(df2d, self.rapiditymin, self.rapiditymax)
             self.add_derived(df2d)
             for icanv in range(len(self.var_2d_distr)):
                 c = TCanvas('c_'+self.case+'_'+self.var_2d_distr[icanv][0][0]+'_vs_'+self.var_2d_distr[icanv][0][1],

@@ -30,15 +30,16 @@ def steer_analysis(case):
         data_param = yaml.load(datafile)
     myan = Analyzer(data_param[case], case)
     do_distributions = True
+    rapiditycut = False
     if do_distributions is True:
-        #myan.plot()
-        #myan.hadron_ptratio()
-        #myan.hadron_multiratio()
-        #myan.plot_tunes(True)
-        myan.plot2d()
+        myan.plot(rapiditycut)
+        myan.hadron_ptratio(rapiditycut)
+        myan.hadron_multiratio(rapiditycut)
+        myan.plot_tunes(rapiditycut, True)
+        myan.plot2d(rapiditycut)
 
 steer_analysis("Ds")
-#steer_analysis("D0")
-#steer_analysis("Lc")
-#myplotter = Plotter()
-#myplotter.plotcomparison()
+steer_analysis("D0")
+steer_analysis("Lc")
+myplotter = Plotter()
+myplotter.plotcomparison()

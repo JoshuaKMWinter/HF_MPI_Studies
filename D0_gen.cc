@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 
 	char* outfile;
 	
-	if (argc == 0) outfile = (char*)"CSVs/D0_EventData.csv";
+	if (argc == 1) outfile = (char*)"CSVs/D0_EventData.csv";
 	else if (argc !=3) {cout<<"Wrong number of arguments. One output file and on pythia tune expected. Program stopped."<<endl; return(1);}
 	else {
 		outfile = argv[1];
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
 
 	//outfile for selected event kinematic analysis
 	std::ofstream datafile; datafile.open(outfile);
-	datafile << "cLO_pT,cLO_phi,cLO_eta,c_pT,c_phi,c_eta,chad_pT,chad_phi,chad_eta,cbarLO_pT,cbarLO_phi,cbarLO_eta,cbar_pT,cbar_phi,cbar_eta,cbarhad_pT,cbarhad_phi,cbarhad_eta,d1_pT,d1_phi,d1_eta,d1bar_pT,d1bar_phi,d1bar_eta,d2_pT,d2_phi,d2_eta,d2bar_pT,d2bar_phi,d2bar_eta,multiplicity,chad_cone_mult,chad_ptcone,cbarhad_cone_mult,cbarhad_ptcone\n";
+	datafile << "cLO_pT,cLO_phi,cLO_eta,cLO_rap,c_pT,c_phi,c_eta,c_rap,chad_pT,chad_phi,chad_eta,chad_rap,cbarLO_pT,cbarLO_phi,cbarLO_eta,cbarLO_rap,cbar_pT,cbar_phi,cbar_eta,cbar_rap,cbarhad_pT,cbarhad_phi,cbarhad_eta,cbarhad_rap,d1_pT,d1_phi,d1_eta,d1_rap,d1bar_pT,d1bar_phi,d1bar_eta,d1bar_rap,d2_pT,d2_phi,d2_eta,d2_rap,d2bar_pT,d2bar_phi,d2bar_eta,d2bar_rap,multiplicity,chad_cone_mult,chad_ptcone,cbarhad_cone_mult,cbarhad_ptcone\n";
 
 	Pythia pythia;
 	
@@ -49,11 +49,11 @@ int main(int argc, char* argv[]) {
 	for (int iEvent = 0; iEvent < 200000; ++iEvent) { //100k
 		if (!pythia.next()) continue;
 		
-		double cLO_pt = 0,  cLO_phi = 0,  cLO_eta = 0,  cbarLO_pt = 0, cbarLO_phi = 0, cbarLO_eta = 0; //Leading Order charm kinematics
-		double c_pt = 0,    c_phi = 0,    c_eta = 0,    cbar_pt = 0,   cbar_phi = 0,   cbar_eta = 0;   //Charm kin. at hadronisation
-		double chad_pt = 0, chad_phi = 0, chad_eta = 0, cbarhad_pt = 0,   cbarhad_phi = 0,   cbarhad_eta = 0;   //Charm kin. in hadron
-		double d1_pt = 0,   d1_phi = 0,   d1_eta = 0,   d1bar_pt = 0,  d1bar_phi = 0,  d1bar_eta = 0;  //kinematics of daughter particles
-		double d2_pt = 0,   d2_phi = 0,   d2_eta = 0,   d2bar_pt = 0,  d2bar_phi = 0,  d2bar_eta = 0;  
+		double cLO_pt = 0,  cLO_phi = 0,  cLO_eta = 0,  cLO_rap = 0,  cbarLO_pt = 0,  cbarLO_phi = 0,  cbarLO_eta = 0,  cbarLO_rap = 0;	//Leading Order charm kinematics
+		double c_pt = 0,    c_phi = 0,    c_eta = 0,    c_rap = 0,    cbar_pt = 0,    cbar_phi = 0,    cbar_eta = 0,    cbar_rap = 0;	//Charm kin. at hadronisation
+		double chad_pt = 0, chad_phi = 0, chad_eta = 0, chad_rap = 0, cbarhad_pt = 0, cbarhad_phi = 0, cbarhad_eta = 0, cbarhad_rap = 0;//Charm kin. in hadron
+		double d1_pt = 0,   d1_phi = 0,   d1_eta = 0,   d1_rap = 0,   d1bar_pt = 0,   d1bar_phi = 0,   d1bar_eta = 0,   d1bar_rap = 0;	//kinematics of daughter particles
+		double d2_pt = 0,   d2_phi = 0,   d2_eta = 0,   d2_rap = 0,   d2bar_pt = 0,   d2bar_phi = 0,   d2bar_eta = 0,   d2bar_rap = 0;  
 		double chad_ptcone = 0, cbarhad_ptcone = 0;
 
 		int n_chad = 0, n_cbarhad = 0, n_c = 0, n_cbar = 0, n_d1 = 0, n_d1bar = 0, n_d2 = 0, n_d2bar = 0; //counters for number of selected particles
@@ -74,11 +74,13 @@ int main(int argc, char* argv[]) {
 				cLO_pt  = pythia.event[i].pT();
 				cLO_phi = pythia.event[i].phi();
 				cLO_eta = pythia.event[i].eta();
+				cLO_rap = pythia.event[i].y();
 			} 
 			if (id == -4 && status == -23) {
 				cbarLO_pt  = pythia.event[i].pT();
 				cbarLO_phi = pythia.event[i].phi();
 				cbarLO_eta = pythia.event[i].eta();
+				cbarLO_rap = pythia.event[i].y();
 			}
 
 			//kinematics of final charm quarks prior to confinement
@@ -86,12 +88,14 @@ int main(int argc, char* argv[]) {
 				c_pt  = pythia.event[i].pT();
 				c_phi = pythia.event[i].phi();
 				c_eta = pythia.event[i].eta();
+				c_rap = pythia.event[i].y();
 				n_c++;
 			} 
 			if (id == -4 && status/10 == -7) {
 				cbar_pt  = pythia.event[i].pT();
 				cbar_phi = pythia.event[i].phi();
 				cbar_eta = pythia.event[i].eta();
+				cbar_rap = pythia.event[i].y();
 				n_cbar++;
 			}
                         //Identify charmed hadrons. (Kinematics determined after event selection)
@@ -103,6 +107,7 @@ int main(int argc, char* argv[]) {
 				d1_pt  = pythia.event[i].pT();
 				d1_phi = pythia.event[i].phi();
 				d1_eta = pythia.event[i].eta();
+				d1_rap = pythia.event[i].y();
 				n_d1++;
 			}
 			//d1bar = pi-
@@ -110,6 +115,7 @@ int main(int argc, char* argv[]) {
 				d1bar_pt  = pythia.event[i].pT();
 				d1bar_phi = pythia.event[i].phi();
 				d1bar_eta = pythia.event[i].eta();
+				d1bar_rap = pythia.event[i].y();
 				n_d1bar++;
 			}
 			//d2 = K+
@@ -117,6 +123,7 @@ int main(int argc, char* argv[]) {
 				d2_pt  = pythia.event[i].pT();
 				d2_phi = pythia.event[i].phi();
 				d2_eta = pythia.event[i].eta();
+				d2_rap = pythia.event[i].y();
 				n_d2++;
 			}
 			//d2bar = K-
@@ -124,6 +131,7 @@ int main(int argc, char* argv[]) {
 				d2bar_pt  = pythia.event[i].pT();
 				d2bar_phi = pythia.event[i].phi();
 				d2bar_eta = pythia.event[i].eta();
+				d2bar_rap = pythia.event[i].y();
 				n_d2bar++;
 			}
 		}
@@ -134,6 +142,7 @@ int main(int argc, char* argv[]) {
 			chad_pt  = pythia.event[chad_ind].pT();  cbarhad_pt  = pythia.event[cbarhad_ind].pT();
 			chad_phi = pythia.event[chad_ind].phi(); cbarhad_phi = pythia.event[cbarhad_ind].phi();
 			chad_eta = pythia.event[chad_ind].eta(); cbarhad_eta = pythia.event[cbarhad_ind].eta();
+			chad_rap = pythia.event[chad_ind].y();   cbarhad_rap = pythia.event[cbarhad_ind].y();
 						
 			//Find total pT and number of final particles inside cone of radius R around each D meson
 			const double R = 0.7;
@@ -147,10 +156,10 @@ int main(int argc, char* argv[]) {
                                 if (cbarhad_deltaR < R) {cbarhad_cone_mult++; cbarhad_ptcone += pt;}
                         }
 			//write to datafile
-			datafile <<cLO_pt<<","<<cLO_phi<<","<<cLO_eta<<","<<c_pt<<","<<c_phi<<","<<c_eta<<","<<chad_pt<<","<<chad_phi<<","<<chad_eta<<","
-				 <<cbarLO_pt<<","<<cbarLO_phi<<","<<cbarLO_eta<<","<<cbar_pt<<","<<cbar_phi<<","<<cbar_eta<<","<<cbarhad_pt<<","<<cbarhad_phi<<","<<cbarhad_eta<<","
-				 <<d1_pt<<","<<d1_phi<<","<<d1_eta<<","<<d1bar_pt<<","<<d1bar_phi<<","<<d1bar_eta<<","
-				 <<d2_pt<<","<<d2_phi<<","<<d2_eta<<","<<d2bar_pt<<","<<d2bar_phi<<","<<d2bar_eta<<","
+			datafile <<cLO_pt<<","<<cLO_phi<<","<<cLO_eta<<","<<cLO_rap<<","<<c_pt<<","<<c_phi<<","<<c_eta<<","<<c_rap<<","<<chad_pt<<","<<chad_phi<<","<<chad_eta<<","<<chad_rap<<","
+				 <<cbarLO_pt<<","<<cbarLO_phi<<","<<cbarLO_eta<<","<<cbarLO_rap<<","<<cbar_pt<<","<<cbar_phi<<","<<cbar_eta<<","<<cbar_rap<<","<<cbarhad_pt<<","<<cbarhad_phi<<","<<cbarhad_eta<<","<<cbarhad_rap<<","
+				 <<d1_pt<<","<<d1_phi<<","<<d1_eta<<","<<d1_rap<<","<<d1bar_pt<<","<<d1bar_phi<<","<<d1bar_eta<<","<<d1bar_rap<<","
+				 <<d2_pt<<","<<d2_phi<<","<<d2_eta<<","<<d2_rap<<","<<d2bar_pt<<","<<d2bar_phi<<","<<d2bar_eta<<","<<d2bar_rap<<","
 				 <<mult<<","<<chad_cone_mult<<","<<chad_ptcone<<","<<cbarhad_cone_mult<<","<<cbarhad_ptcone<<"\n";
 
 		}
