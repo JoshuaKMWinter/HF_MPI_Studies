@@ -6,17 +6,19 @@
 
 Settings
 Tune:PreferLHAPDF			1		2		2			2			2		2
-Monash13				?		On		On			On			On		On
+Monash13				On (?)		On		On			On			On		On
 Random:seed				-1		0		0			0			0		0
 Random:setSeed				Off		On		On			On			On		On
 ParticleDecays:limitTau0		Off		On		On			On			On		On
 ParticleDecays:tau0Max			10		3		3			3			3		3
+
 ColourReconnection:reconnect		On		Off					On (def)					
 ColourReconnection:mode			0							1			             
 ColourReconnection:timeDilationPar	0.18							0.18 (def)			             
 ColourReconnection:junctionCorrection	1.2							1.2 (def)
 PartonLevel:earlyResDec			Off		Off (def)			             
 MultiPartonInteractions:pT0Ref		2.28		2.30					2.15			             
+
 Ropewalk:RopeHadronization		Off										On		On
 Ropewalk:doShoving			Off										Off (def)	On
 Ropewalk:doFlavour			Off										On		Off (def)

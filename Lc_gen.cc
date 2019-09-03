@@ -17,9 +17,9 @@ int main(int argc, char* argv[]) {
 	const int d3_id = 211;
 	const int d4_id = 211;
 
-	 char* outfile;
+	char* outfile;
 
-        if (argc == 1) outfile = (char*)"CSVs/Lc_EventData.csv";
+        if (argc == 1) outfile = (char*)"CSVs/Lc_EventData_TEST.csv";
         else if (argc !=3) {cout<<"Wrong number of arguments. One output file and on pythia tune expected. Program stopped."<<endl; return(1);}
         else {
                 outfile = argv[1];
@@ -50,8 +50,9 @@ int main(int argc, char* argv[]) {
 	//pythia.readString("PhaseSpace:pTHatMin = 4.");
 	pythia.init();
 	
+
 	// Begin event loop. Generate event. Skip if error. List first one.
-	for (int iEvent = 0; iEvent < 500000; ++iEvent) { 
+	for (int iEvent = 0; iEvent < 10000; ++iEvent) { 
 		if (!pythia.next()) continue;
 		//if(iEvent == 419) pythia.event.list();
 
@@ -64,11 +65,12 @@ int main(int argc, char* argv[]) {
                 double d4_pt = 0,   d4_phi = 0,   d4_eta = 0,   d4_rap = 0,   d4bar_pt = 0,  d4bar_phi = 0,  d4bar_eta = 0,  d4bar_rap = 0;
 		double chad_ptcone = 0, cbarhad_ptcone = 0;		
 
-		int n_chad = 0, n_cbarhad = 0, n_c = 0, n_cbar = 0, n_d1 = 0, n_d1bar = 0, n_d2 = 0, n_d2bar = 0; //counters for number of selected particles
+		int n_chad = 0, n_cbarhad = 0, n_c = 0, n_cbar = 0, n_d1 = 0, n_d1bar = 0, n_d2 = 0, n_d2bar = 0, n_d3 = 0, n_d3bar = 0, n_d4 = 0, n_d4bar = 0; //counters for number of selected particles
 		int chad_ind = -1, cbarhad_ind = -1, cmid_ind = -1, cbarmid_ind = -1; //integers to track charm hadron index
 		int mult = 0, chad_cone_mult = 0, cbarhad_cone_mult = 0; //multiplicity counters.
 		
 		int KS0_ind = -1, KS0bar_ind = -1;
+		int cind = -1, cbarind = -1;
 
 		for (int i = 0; i < pythia.event.size(); ++i) {
 			
@@ -86,23 +88,33 @@ int main(int argc, char* argv[]) {
 				cLO_phi = pythia.event[i].phi();
 				cLO_eta = pythia.event[i].eta();
 				cLO_rap = pythia.event[i].y();
+				cind = i;
+				while (pythia.event[cind].id() == 4) {
+					if (pythia.event[pythia.event[cind].daughter1()].id() == 4) cind = pythia.event[cind].daughter1();
+					else break;
+				}
 			} 
 			if (id == -4 && status == -23) {
 				cbarLO_pt  = pythia.event[i].pT();
 				cbarLO_phi = pythia.event[i].phi();
 				cbarLO_eta = pythia.event[i].eta();
 				cbarLO_rap = pythia.event[i].y();
+				cbarind = i;
+				while (pythia.event[cbarind].id() == -4) {
+					if (pythia.event[pythia.event[cbarind].daughter1()].id() == -4) cbarind = pythia.event[cbarind].daughter1();
+					else break;
+				}
 			}
 
 			//Charm kinematics prior to hadronisation
-			if (id == 4 && status/10 == -7) { //71-79 preparation for hadronisation
+			if (id == 4 && status/10 == -7 && cind == i) { //71-79 preparation for hadronisation
 				c_pt  = pythia.event[i].pT();
 				c_phi = pythia.event[i].phi();
 				c_eta = pythia.event[i].eta();
 				c_rap = pythia.event[i].y();
 				n_c++;
 			} 
-			if (id == -4 && status/10 == -7) {
+			if (id == -4 && status/10 == -7 && cbarind == i) {
 				cbar_pt  = pythia.event[i].pT();
 				cbar_phi = pythia.event[i].phi();
 				cbar_eta = pythia.event[i].eta();
@@ -152,31 +164,35 @@ int main(int argc, char* argv[]) {
 				d3_phi = pythia.event[i].phi();
 				d3_eta = pythia.event[i].eta();
 				d3_rap = pythia.event[i].y();
+				n_d3++;
 			}
 			if (id == -d3_id && (mother1 == KS0_ind || mother2 == KS0_ind)) {
 				d3bar_pt  = pythia.event[i].pT();
 				d3bar_phi = pythia.event[i].phi();
 				d3bar_eta = pythia.event[i].eta();
 				d3bar_rap = pythia.event[i].y();
+				n_d3bar++;
 			}
 			if (id == d4_id && (mother1 == KS0bar_ind || mother2 ==KS0bar_ind)) {
 				d4_pt  = pythia.event[i].pT();
 				d4_phi = pythia.event[i].phi();
 				d4_eta = pythia.event[i].eta();
 				d4_rap = pythia.event[i].y();
+				n_d4++;
 			}
 			if (id == -d4_id && (mother1 == KS0bar_ind || mother2 == KS0bar_ind)) {
 				d4bar_pt  = pythia.event[i].pT();
 				d4bar_phi = pythia.event[i].phi();
 				d4bar_eta = pythia.event[i].eta();
 				d4bar_rap = pythia.event[i].y();
+				n_d4bar++;
 			}
 						
 		}
-	
 		//choose only events with 1 of each particle, as generation will ensure correct matching
-		if (n_chad == 1 && n_cbarhad == 1 && n_c == 1 && n_cbar == 1 && n_d1 == 1 && n_d1bar == 1 && n_d2 == 1 && n_d2bar == 1 /*&& n_d3 == 1 && n_d3bar == 1 && n_d4 == 1 && n_d4bar == 1*/) {
-			//pythia.event.list();
+		if (n_chad == 1 && n_cbarhad == 1 && n_c == 1 && n_cbar == 1 /*&& n_d1 == 1 && n_d1bar == 1 && n_d2 == 1 && n_d2bar == 1 && n_d3 == 1 && n_d3bar == 1 && n_d4 == 1 && n_d4bar == 1*/) {
+			pythia.event.list();
+			cout<<"nD1 = "<<n_d1<<"; nD1bar = "<<n_d1bar<<"; nD2 = "<<n_d2<<"; nD2bar = "<<n_d2bar<<"; nD3 = "<<n_d3<<"; nD3bar = "<<n_d3bar<<"; nD4 = "<<n_d4<<"; nD4bar = "<<n_d4bar<<endl;
 
 			chad_pt  = pythia.event[chad_ind].pT();  cbarhad_pt  = pythia.event[cbarhad_ind].pT();
 			chad_phi = pythia.event[chad_ind].phi(); cbarhad_phi = pythia.event[cbarhad_ind].phi();
@@ -210,7 +226,6 @@ int main(int argc, char* argv[]) {
 	datafile.close();
 
 	pythia.stat();
-		
 	return 0;
 }
 	

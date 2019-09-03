@@ -3,7 +3,6 @@
 #include <fstream>
 #include <string> 
 #include <cmath>
-#include <vector>
 
 using namespace Pythia8;
 
@@ -60,6 +59,8 @@ int main(int argc, char* argv[]) {
 		int chad_ind = -1, cbarhad_ind = -1; //integers to track charm meson index
 		int mult = 0, chad_cone_mult = 0, cbarhad_cone_mult = 0; //multiplicity counters.
 
+	        int cind = -1, cbarind = -1;
+
 		for (int i = 0; i < pythia.event.size(); ++i) {
 			
 			//use all final particles as an estimate of multiplicity
@@ -75,23 +76,34 @@ int main(int argc, char* argv[]) {
 				cLO_phi = pythia.event[i].phi();
 				cLO_eta = pythia.event[i].eta();
 				cLO_rap = pythia.event[i].y();
+				cind = i;
+				while (pythia.event[cind].id() == 4) {
+                                        if (pythia.event[pythia.event[cind].daughter1()].id() == 4) cind = pythia.event[cind].daughter1();
+                                        else break;
+                                }
+
 			} 
 			if (id == -4 && status == -23) {
 				cbarLO_pt  = pythia.event[i].pT();
 				cbarLO_phi = pythia.event[i].phi();
 				cbarLO_eta = pythia.event[i].eta();
 				cbarLO_rap = pythia.event[i].y();
+				cbarind = i;
+				while (pythia.event[cbarind].id() == -4) {
+                                        if (pythia.event[pythia.event[cbarind].daughter1()].id() == -4) cbarind = pythia.event[cbarind].daughter1();
+                                        else break;
+                                }
 			}
 
 			//kinematics of final charm quarks prior to confinement
-			if (id == 4 && status/10 == -7) { //71-79 preparation for hadronisation
+			if (id == 4 && status/10 == -7 && cind == i) { //71-79 preparation for hadronisation
 				c_pt  = pythia.event[i].pT();
 				c_phi = pythia.event[i].phi();
 				c_eta = pythia.event[i].eta();
 				c_rap = pythia.event[i].y();
 				n_c++;
 			} 
-			if (id == -4 && status/10 == -7) {
+			if (id == -4 && status/10 == -7 && cbarind == i) {
 				cbar_pt  = pythia.event[i].pT();
 				cbar_phi = pythia.event[i].phi();
 				cbar_eta = pythia.event[i].eta();
