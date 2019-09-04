@@ -1,16 +1,17 @@
-			
+! = commented out.			
+
 					Default		NoCR		MPIBased		MoreQCDBased		Ropes		RopesShoving
-	 # of events D0 (200k)		48901		55285		49322			527			46556		5084
-		     Ds (400k)		2775		3023		2711			151			2892		302
-                     Lc (500k)		762		867		773			127			751		79
+	 # of events D0 (200k)		61364		61222		61364			57292			60661		61641
+		     Ds (400k)		3897		3824		3897			3709			4213		3841
+                     Lc (500k)		1041		966		1041			5167			1045		990
 
 Settings
 Tune:PreferLHAPDF			1		2		2			2			2		2
-Monash13				On (?)		On		On			On			On		On
-Random:seed				-1		0		0			0			0		0
-Random:setSeed				Off		On		On			On			On		On
-ParticleDecays:limitTau0		Off		On		On			On			On		On
-ParticleDecays:tau0Max			10		3		3			3			3		3
+Monash13				On		On		On			On			On		On
+Random:seed				-1		!0		!0			!0			!0		!0
+Random:setSeed				Off		!On		!On			!On			!On		!On
+ParticleDecays:limitTau0		Off		!On		!On			!On			!On		!On
+ParticleDecays:tau0Max			10		!3		!3			!3			!3		!3
 
 ColourReconnection:reconnect		On		Off					On (def)					
 ColourReconnection:mode			0							1			             

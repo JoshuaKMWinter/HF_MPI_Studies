@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 
 	char* outfile;
 
-        if (argc == 1) outfile = (char*)"CSVs/Lc_EventData_TEST.csv";
+        if (argc == 1) outfile = (char*)"CSVs/Lc_EventData.csv";
         else if (argc !=3) {cout<<"Wrong number of arguments. One output file and on pythia tune expected. Program stopped."<<endl; return(1);}
         else {
                 outfile = argv[1];
@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
 	
 
 	// Begin event loop. Generate event. Skip if error. List first one.
-	for (int iEvent = 0; iEvent < 10000; ++iEvent) { 
+	for (int iEvent = 0; iEvent < 500000; ++iEvent) { 
 		if (!pythia.next()) continue;
 		//if(iEvent == 419) pythia.event.list();
 
@@ -191,8 +191,8 @@ int main(int argc, char* argv[]) {
 		}
 		//choose only events with 1 of each particle, as generation will ensure correct matching
 		if (n_chad == 1 && n_cbarhad == 1 && n_c == 1 && n_cbar == 1 /*&& n_d1 == 1 && n_d1bar == 1 && n_d2 == 1 && n_d2bar == 1 && n_d3 == 1 && n_d3bar == 1 && n_d4 == 1 && n_d4bar == 1*/) {
-			pythia.event.list();
-			cout<<"nD1 = "<<n_d1<<"; nD1bar = "<<n_d1bar<<"; nD2 = "<<n_d2<<"; nD2bar = "<<n_d2bar<<"; nD3 = "<<n_d3<<"; nD3bar = "<<n_d3bar<<"; nD4 = "<<n_d4<<"; nD4bar = "<<n_d4bar<<endl;
+			//pythia.event.list();
+			//cout<<"nD1 = "<<n_d1<<"; nD1bar = "<<n_d1bar<<"; nD2 = "<<n_d2<<"; nD2bar = "<<n_d2bar<<"; nD3 = "<<n_d3<<"; nD3bar = "<<n_d3bar<<"; nD4 = "<<n_d4<<"; nD4bar = "<<n_d4bar<<endl;
 
 			chad_pt  = pythia.event[chad_ind].pT();  cbarhad_pt  = pythia.event[cbarhad_ind].pT();
 			chad_phi = pythia.event[chad_ind].phi(); cbarhad_phi = pythia.event[cbarhad_ind].phi();

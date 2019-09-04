@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
 	Pythia pythia;
 
 	if (argc == 3) {
-		pythia.readFile("../PythiaTunes/WithMPI_NoCR.cmnd");
+		pythia.readFile(argv[2]);
 		cout<<"Reading Pythia Tune: "<<argv[2]<<endl;
 	}
 

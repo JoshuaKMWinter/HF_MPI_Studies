@@ -272,7 +272,7 @@ class Analyzer:
             for ihist in range(len(histlist[icanv])):
                 legend.AddEntry(histlist[icanv][ihist], self.leg_tune_distr[ihist])
                 if ihist == 0:
-                    if self.case == 'Lc': histlist[icanv][ihist].SetMaximum(0.2)
+                    if self.case == 'Lc': histlist[icanv][ihist].SetMaximum(0.5)
                     if self.case == 'Ds': histlist[icanv][ihist].SetMaximum(0.4)
                     histlist[icanv][ihist].SetMinimum(0)
                     histlist[icanv][ihist].Draw()
