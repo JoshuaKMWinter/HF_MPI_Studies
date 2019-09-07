@@ -17,6 +17,7 @@ Ds:
   pdg: 431
   rapiditymax: +0.5
   rapiditymin: -0.5
+  label: 'D_{s}'
   variables:
       var_all: [cLO_pT,cLO_phi,cLO_eta,cLO_rap,c_pT,c_phi,c_eta,c_rap,chad_pT,chad_phi,chad_eta,chad_rap,cbarLO_pT,cbarLO_phi,cbarLO_eta,cbarLO_rap,
       cbar_pT,cbar_phi,cbar_eta,cbar_rap,cbarhad_pT,cbarhad_phi,cbarhad_eta,cbarhad_rap,d1_pT,d1_phi,d1_eta,d1_rap,d1bar_pT,d1bar_phi,d1bar_eta,d1bar_rap,
@@ -41,25 +42,29 @@ Ds:
   ylab_1d_distr: ['Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events']
   logy_1d_distr: [True, False, False, False, True, True, False, False, False, False, False] 
   
-  tune_fileinput: [../input/Ds_EventData.csv, ../input/Ds_EventData_WithMPI_NoCR.csv, ../input/Ds_EventData_WithMPI_MoreQCDBased.csv, 
-            ../input/Ds_EventData_WithMPI_MPIBased.csv, ../input/Ds_EventData_WithMPI_Ropes.csv, ../input/Ds_EventData_WithMPI_RopesShoving.csv]
+  tune_fileinput: [../input/Ds_EventData_WithMPI_MPIBased.csv, ../input/Ds_EventData_WithMPI_NoCR.csv, ../input/Ds_EventData_WithMPI_MoreQCDBased.csv, 
+             ../input/Ds_EventData_WithMPI_Ropes.csv, ../input/Ds_EventData_WithMPI_RopesShoving.csv] #../input/Ds_EventData.csv, 
   var_tune_distr: [ [cLO_pT, c_pT, chad_pT], [FFchad, FFc], [multiplicity], [chad_cone_mult], [c_ptratio, chad_ptratio], 
-                 [dphi_cc, dphi_cchad], [deta_ccLO, deta_cc, deta_cchad], [dphi_chad], [deta_chad], [chad_ptcone]]
-  nbins_tune_distr: [19, 30, 50, 35, 25, 16, 20, 16, 20, 30]
-  min_tune_distr: [0,0,0,0,0,0,0,0,0,0]
-  max_tune_distr: [38, 3, 500, 35, 5, 3.2, 7, 3.2, 7, 15]
+                 [dphi_cc, dphi_cchad], [deta_ccLO, deta_cc, deta_cchad], [dphi_chad], [deta_chad], [chad_ptcone],
+                 [cLO_phi, c_phi, chad_phi], [cLO_eta, c_eta, chad_eta] ]
+  nbins_tune_distr: [19, 30, 25, 35, 25, 16, 20, 16, 20, 30, 16, 20]
+  min_tune_distr: [0,0,0,0,0,0,0,0,0,0,0,0]
+  max_tune_distr: [38, 3, 500, 35, 5, 3.2, 7, 3.2, 7, 15, 3.2, 7]
+  logy_tune_distr: [True, False, False, False, False, False, False, False, False, False, False, False]
   title_tune_distr: [ ['Charm Transverse Momentum (LO)', 'Charm Transverse Momentum (prior to hadronisation)', 'Charmed Hadron Transverse Momentum'], 
                    ['Charmed Hadron Fragmentation Distribution', 'c-quark Fragmentation Distribution'],
                    ['Event Multiplicity'], ['Hadron cone multiplicity (R<0.7)'], ['c/#bar{c} Quark Transverse Momentum Ratio', 'c/#bar{c} Hadron Transverse Momentum Ratio'],
                    ['Angular separation of charm-quark pair' ,'Angular separation of charm hadron pair'],
                    ['Pseudorapidity difference of charm-quark pair (LO)','Pseudorapidity difference of charm-quark pair','Pseudorapidity difference of charm hadron pair'],
-                   ['Angular separation between charm quark-hadron pair'],['Pseudorapidity difference of charm quark-hadron pair'],['Total p_{T} within cone (R=0.7) around hadron']]
+                   ['Angular separation between charm quark-hadron pair'],['Pseudorapidity difference of charm quark-hadron pair'],['Total p_{T} within cone (R=0.7) around hadron'],
+                   ['c-quark LO #phi distribution','c-quark #phi distribution (before hadronisation)','D_{s}^{+} #phi distribution'],['c-quark LO #eta distribution','c-quark #eta distribution (before hadronisation)','D_{s}^{+} #eta distribution'] ]
   xlab_tune_distr: ['p_{T} c (GeV)', 'Fragmentation ratio', 'Event Multiplicity', 'Number of final particles around hadron (R<0.7)', 'p_{T} c / p_{T} #bar{c}',
-                  '#Delta#phi','#Delta#eta','#Delta#phi','#Delta#eta', 'Total p_{T} within cone R<0.7 (GeV)']
-  ylab_tune_distr: ['Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events']
-  leg_tune_distr: ['Default', 'NoCR', 'MoreQCDBased', 'MPIBased', 'Ropes', 'RopesShoving']
+                  '#Delta#phi','#Delta#eta','#Delta#phi','#Delta#eta', 'Total p_{T} within cone R<0.7 (GeV)','#phi','#eta']
+  ylab_tune_distr: ['Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events']
+  leg_tune_distr: ['MPIBased', 'NoCR', 'MoreQCDBased', 'Ropes', 'RopesShoving'] #'Default', 
 
-  colours: [4, 2, 1, 3, 6, 7]
+  colours: [4, 2, 1, 6, 7] #3
+  markers: [20, 34, 20, 33, 33]
 
   var_2d_distr: [ [[chad_pT, d1_pT], [chad_pT, d3_pT], [chad_pT, d3bar_pT], [cbarhad_pT, d1bar_pT], [cbarhad_pT, d4bar_pT], [cbarhad_pT, d4_pT]], 
          [[chad_cone_mult, dR_d1], [chad_cone_mult, dR_d3], [chad_cone_mult, dR_d3bar], [cbarhad_cone_mult, dR_d1bar], [cbarhad_cone_mult, dR_d4bar], [cbarhad_cone_mult, dR_d4]], 
@@ -72,7 +77,7 @@ Ds:
                '#DeltaR(D_{s}^{-},#pi^{-}) vs D_{s}^{-} cone multiplicity', '#DeltaR(D_{s}^{-},K^{-}) vs D_{s}^{-} cone multiplicity', '#DeltaR(D_{s}^{-},K^{+}) vs D_{s}^{-} cone multiplicity'],
               ['#DeltaR(D_{s}^{+},#pi^{+}) vs p_{T} D_{s}^{+}', '#DeltaR(D_{s}^{+},K^{+}) vs p_{T} D_{s}^{+}', '#DeltaR(D_{s}^{+},K^{-}) vs p_{T} D_{s}^{+}',
                '#DeltaR(D_{s}^{-},#pi^{-}) vs p_{T} D_{s}^{-}', '#DeltaR(D_{s}^{-},K^{-}) vs p_{T} D_{s}^{-}', '#DeltaR(D_{s}^{-},K^{+}) vs p_{T} D_{s}^{-}'],
-              ['D_{s}^{+} cone multiplicity vs p_{T} D_{s}^{+}', 'Event multiplicity vs p_{T} D_{s}^{-}', 'D_{s}^{-} cone multiplicity vs p_{T} D_{s}^{-}', 'Event multiplicity vs p_{T} D_{s}^{-}']]
+              ['D_{s}^{+} cone multiplicity vs p_{T} D_{s}^{+}', 'Event multiplicity vs p_{T} D_{s}^{+}', 'D_{s}^{-} cone multiplicity vs p_{T} D_{s}^{-}', 'Event multiplicity vs p_{T} D_{s}^{-}']]
   nbins_2d_distr: [ [[150,30], [150,30], [150,30], [150,30], [150,30], [150,30]], 
               [[30,30], [30,30], [30,30], [30,30], [30,30], [30,30]],
               [[150,30], [150,30], [150,30], [150,30], [150,30], [150,30]],
@@ -88,7 +93,7 @@ Ds:
             ['#DeltaR(D_{s}^{+},#pi^{+})', '#DeltaR(D_{s}^{+},K^{+})', '#DeltaR(D_{s}^{+},K^{-})', '#DeltaR(D_{s}^{-},#pi^{-})', '#DeltaR(D_{s}^{-},K^{-})', '#DeltaR(D_{s}^{-},K^{+})'],
             ['# final particles (R<0.7)', '# final particles', '# final particles (R<0.7)',  '# final particles'] ] 
   
-  pthad_fileinput: [../input/pThad_Data.csv, ../input/pThad_Data_WithMPI_NoCR.csv, ../input/pThad_Data_WithMPI_MoreQCDBased.csv, ../input/pThad_Data_WithMPI_MPIBased.csv, ../input/pThad_Data_WithMPI_Ropes.csv, ../input/pThad_Data_WithMPI_RopesShoving.csv]
+  pthad_fileinput: [../input/pThad_Data_WithMPI_MPIBased.csv, ../input/pThad_Data_WithMPI_NoCR.csv, ../input/pThad_Data_WithMPI_MoreQCDBased.csv, ../input/pThad_Data_WithMPI_Ropes.csv, ../input/pThad_Data_WithMPI_RopesShoving.csv] #../input/pThad_Data.csv, 
   multi_bins: [0,100,300] 
 
 D0:
@@ -96,6 +101,7 @@ D0:
   pdg: 421
   rapiditymax: +0.5
   rapiditymin: -0.5
+  label: 'D^{0}'
   variables:
       var_all: [cLO_pT,cLO_phi,cLO_eta,cLO_rap,c_pT,c_phi,c_eta,c_rap,chad_pT,chad_phi,chad_eta,chad_rap,cbarLO_pT,cbarLO_phi,cbarLO_eta,cbarLO_rap,
       cbar_pT,cbar_phi,cbar_eta,cbar_rap,cbarhad_pT,cbarhad_phi,cbarhad_eta,cbarhad_rap,d1_pT,d1_phi,d1_eta,d1_rap,d1bar_pT,d1bar_phi,d1bar_eta,d1bar_rap,
@@ -119,25 +125,29 @@ D0:
   ylab_1d_distr: ['Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events']
   logy_1d_distr: [True, False, False, False, True, True, False, False, False, False, False] 
   
-  tune_fileinput: [../input/D0_EventData.csv, ../input/D0_EventData_WithMPI_NoCR.csv, ../input/D0_EventData_WithMPI_MoreQCDBased.csv, 
-            ../input/D0_EventData_WithMPI_MPIBased.csv, ../input/D0_EventData_WithMPI_Ropes.csv, ../input/D0_EventData_WithMPI_RopesShoving.csv]
+  tune_fileinput: [../input/D0_EventData_WithMPI_MPIBased.csv, ../input/D0_EventData_WithMPI_NoCR.csv, ../input/D0_EventData_WithMPI_MoreQCDBased.csv, 
+             ../input/D0_EventData_WithMPI_Ropes.csv, ../input/D0_EventData_WithMPI_RopesShoving.csv] #../input/D0_EventData.csv, 
   var_tune_distr: [ [cLO_pT, c_pT, chad_pT], [FFchad, FFc], [multiplicity], [chad_cone_mult], [c_ptratio, chad_ptratio], 
-                 [dphi_cc, dphi_cchad], [deta_ccLO, deta_cc, deta_cchad], [dphi_chad], [deta_chad], [chad_ptcone]]
-  nbins_tune_distr: [19, 30, 50, 35, 25, 16, 20, 16, 20, 30]
-  min_tune_distr: [0,0,0,0,0,0,0,0,0,0]
-  max_tune_distr: [38, 3, 500, 35, 5, 3.2, 7, 3.2, 7, 15]
+                 [dphi_cc, dphi_cchad], [deta_ccLO, deta_cc, deta_cchad], [dphi_chad], [deta_chad], [chad_ptcone],
+                 [cLO_phi, c_phi, chad_phi], [cLO_eta, c_eta, chad_eta] ]
+  nbins_tune_distr: [19, 30, 50, 35, 25, 16, 20, 16, 20, 30, 16, 20]
+  min_tune_distr: [0,0,0,0,0,0,0,0,0,0,0,0]
+  max_tune_distr: [38, 3, 500, 35, 5, 3.2, 7, 3.2, 7, 15, 3.2, 7]
+  logy_tune_distr: [True, False, False, False, False, False, False, False, False, False, False, False]
   title_tune_distr: [ ['Charm Transverse Momentum (LO)', 'Charm Transverse Momentum (prior to hadronisation)', 'Charmed Hadron Transverse Momentum'],
                    ['Charmed Hadron Fragmentation Distribution', 'c-quark Fragmentation Distribution'],
                    ['Event Multiplicity'], ['Hadron cone multiplicity (R<0.7)'], ['c/#bar{c} Quark Transverse Momentum Ratio', 'c/#bar{c} Hadron Transverse Momentum Ratio'],
                    ['Angular separation of charm-quark pair' ,'Angular separation of charm hadron pair'],
                    ['Pseudorapidity difference of charm-quark pair (LO)','Pseudorapidity difference of charm-quark pair','Pseudorapidity difference of charm hadron pair'],
-                   ['Angular separation between charm quark-hadron pair'],['Pseudorapidity difference of charm quark-hadron pair'],['Total p_{T} within cone (R=0.7) around hadron']]
+                   ['Angular separation between charm quark-hadron pair'],['Pseudorapidity difference of charm quark-hadron pair'],['Total p_{T} within cone (R=0.7) around hadron'],
+                   ['c-quark LO #phi distribution','c-quark #phi distribution (before hadronisation)','D^{0} #phi distribution'],['c-quark LO #eta distribution','c-quark #eta distribution (before hadronisation)','D^{0} #eta distribution'] ]
   xlab_tune_distr: ['p_{T} c (GeV)', 'Fragmentation ratio', 'Event Multiplicity', 'Number of final particles around hadron (R<0.7)', 'p_{T} c / p_{T} #bar{c}',
-                  '#Delta#phi','#Delta#eta','#Delta#phi','#Delta#eta', 'Total p_{T} within cone R<0.7 (GeV)']
-  ylab_tune_distr: ['Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events']
-  leg_tune_distr: ['Default', 'NoCR', 'MoreQCDBased', 'MPIBased', 'Ropes', 'RopesShoving']
+                  '#Delta#phi','#Delta#eta','#Delta#phi','#Delta#eta', 'Total p_{T} within cone R<0.7 (GeV)','#phi','#eta']
+  ylab_tune_distr: ['Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events']
+  leg_tune_distr: ['MPIBased', 'NoCR', 'MoreQCDBased', 'Ropes', 'RopesShoving'] #'Default',
 
-  colours: [4, 2, 1, 3, 6, 7]
+  colours: [4, 2, 1, 6, 7] #3,
+  markers: [20, 34, 20, 33, 33]
 
   var_2d_distr: [ [[chad_pT, d1_pT], [chad_pT, d2bar_pT], [cbarhad_pT, d1bar_pT], [cbarhad_pT, d2_pT]], 
          [[chad_cone_mult, dR_d1], [chad_cone_mult, dR_d2bar], [cbarhad_cone_mult, dR_d1bar], [cbarhad_cone_mult, dR_d2]], 
@@ -166,7 +176,7 @@ D0:
             ['#DeltaR(D^{0},#pi^{+})', '#DeltaR(D^{0},K^{-})', '#DeltaR(#bar{D^{0}},#pi^{-})', '#DeltaR(#bar{D^{0}},K^{+})'],
             ['# final particles (R<0.7)', '# final particles', '# final particles (R<0.7)', '# final particles']] 
   
-  pthad_fileinput: [../input/pThad_Data.csv, ../input/pThad_Data_WithMPI_NoCR.csv, ../input/pThad_Data_WithMPI_MoreQCDBased.csv, ../input/pThad_Data_WithMPI_MPIBased.csv, ../input/pThad_Data_WithMPI_Ropes.csv, ../input/pThad_Data_WithMPI_RopesShoving.csv]
+  pthad_fileinput: [../input/pThad_Data_WithMPI_MPIBased.csv, ../input/pThad_Data_WithMPI_NoCR.csv, ../input/pThad_Data_WithMPI_MoreQCDBased.csv, ../input/pThad_Data_WithMPI_Ropes.csv, ../input/pThad_Data_WithMPI_RopesShoving.csv] #../input/pThad_Data.csv, 
   multi_bins: [0,100,300] 
 
 
@@ -175,6 +185,7 @@ Lc:
   pdg: 4122
   rapiditymax: +0.5
   rapiditymin: -0.5
+  label: '#Lambda_{c}'
   variables:
       var_all: [cLO_pT,cLO_phi,cLO_eta,cLO_rap,c_pT,c_phi,c_eta,c_rap,chad_pT,chad_phi,chad_eta,chad_rap,cbarLO_pT,cbarLO_phi,cbarLO_eta,cbarLO_rap,
       cbar_pT,cbar_phi,cbar_eta,cbar_rap,cbarhad_pT,cbarhad_phi,cbarhad_eta,cbarhad_rap,d1_pT,d1_phi,d1_eta,d1_rap,d1bar_pT,d1bar_phi,d1bar_eta,d1bar_rap,
@@ -199,25 +210,29 @@ Lc:
   ylab_1d_distr: ['Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events', 'Number of Events']
   logy_1d_distr: [True, False, False, False, True, True, False, False, False, False, False] 
   
-  tune_fileinput: [../input/Lc_EventData.csv, ../input/Lc_EventData_WithMPI_NoCR.csv, ../input/Lc_EventData_WithMPI_MoreQCDBased.csv, 
-            ../input/Lc_EventData_WithMPI_MPIBased.csv, ../input/Lc_EventData_WithMPI_Ropes.csv, ../input/Lc_EventData_WithMPI_RopesShoving.csv]
+  tune_fileinput: [../input/Lc_EventData_WithMPI_MPIBased.csv, ../input/Lc_EventData_WithMPI_NoCR.csv, ../input/Lc_EventData_WithMPI_MoreQCDBased.csv, 
+            ../input/Lc_EventData_WithMPI_Ropes.csv, ../input/Lc_EventData_WithMPI_RopesShoving.csv] #../input/Lc_EventData.csv, 
   var_tune_distr: [ [cLO_pT, c_pT, chad_pT], [FFchad, FFc], [multiplicity], [chad_cone_mult], [c_ptratio, chad_ptratio], 
-                 [dphi_cc, dphi_cchad], [deta_ccLO, deta_cc, deta_cchad], [dphi_chad], [deta_chad], [chad_ptcone]]
-  nbins_tune_distr: [10, 10, 20, 18, 13, 8, 10, 8, 10, 15]
-  min_tune_distr: [0,0,0,0,0,0,0,0,0,0]
-  max_tune_distr: [38, 3, 500, 35, 5, 3.2, 7, 3.2, 7, 15]
+                 [dphi_cc, dphi_cchad], [deta_ccLO, deta_cc, deta_cchad], [dphi_chad], [deta_chad], [chad_ptcone],
+                 [cLO_phi, c_phi, chad_phi], [cLO_eta, c_eta, chad_eta] ]
+  nbins_tune_distr: [10, 10, 20, 18, 13, 8, 10, 8, 10, 15, 8, 10]
+  min_tune_distr: [0,0,0,0,0,0,0,0,0,0,0,0]
+  max_tune_distr: [38, 3, 500, 35, 5, 3.2, 7, 3.2, 7, 15, 3.2, 7]
+  logy_tune_distr: [True, False, False, False, False, False, False, False, False, False, False, False]
   title_tune_distr: [ ['Charm Transverse Momentum (LO)', 'Charm Transverse Momentum (prior to hadronisation)', 'Charmed Hadron Transverse Momentum'], 
                    ['Charmed Hadron Fragmentation Distribution', 'c-quark Fragmentation Distribution'],
                    ['Event Multiplicity'], ['Hadron cone multiplicity (R<0.7)'], ['c/#bar{c} Quark Transverse Momentum Ratio', 'c/#bar{c} Hadron Transverse Momentum Ratio'],
                    ['Angular separation of charm-quark pair' ,'Angular separation of charm hadron pair'],
                    ['Pseudorapidity difference of charm-quark pair (LO)','Pseudorapidity difference of charm-quark pair','Pseudorapidity difference of charm hadron pair'],
-                   ['Angular separation between charm quark-hadron pair'],['Pseudorapidity difference of charm quark-hadron pair'],['Total p_{T} within cone (R=0.7) around hadron']]
+                   ['Angular separation between charm quark-hadron pair'],['Pseudorapidity difference of charm quark-hadron pair'],['Total p_{T} within cone (R=0.7) around hadron'],
+                   ['c-quark LO #phi distribution','c-quark #phi distribution (before hadronisation)','#Lambda_{c}^{+} #phi distribution'],['c-quark LO #eta distribution','c-quark #eta distribution (before hadronisation)','#Lambda_{c}^{+} #eta distribution'] ]
   xlab_tune_distr: ['p_{T} c (GeV)', 'Fragmentation ratio', 'Event Multiplicity', 'Number of final particles around hadron (R<0.7)', 'p_{T} c / p_{T} #bar{c}',
-                  '#Delta#phi','#Delta#eta','#Delta#phi','#Delta#eta', 'Total p_{T} within cone R<0.7 (GeV)']
-  ylab_tune_distr: ['Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events']
-  leg_tune_distr: ['Default', 'NoCR', 'MoreQCDBased', 'MPIBased', 'Ropes', 'RopesShoving']
+                  '#Delta#phi','#Delta#eta','#Delta#phi','#Delta#eta', 'Total p_{T} within cone R<0.7 (GeV)','#phi','#eta']
+  ylab_tune_distr: ['Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events','Number of Events']
+  leg_tune_distr: ['MPIBased', 'NoCR', 'MoreQCDBased', 'Ropes', 'RopesShoving'] #'Default',
 
-  colours: [4, 2, 1, 3, 6, 7]
+  colours: [4, 2, 1, 6, 7] #3,
+  markers: [20, 34, 20, 33, 33]
 
   var_2d_distr: [ [[chad_pT, d1_pT], [chad_pT, d3_pT], [chad_pT, d3bar_pT], [cbarhad_pT, d1bar_pT], [cbarhad_pT, d4bar_pT], [cbarhad_pT, d4_pT]], 
          [[chad_cone_mult, dR_d1], [chad_cone_mult, dR_d3], [chad_cone_mult, dR_d3bar], [cbarhad_cone_mult, dR_d1bar], [cbarhad_cone_mult, dR_d4bar], [cbarhad_cone_mult, dR_d4]], 
@@ -230,7 +245,7 @@ Lc:
                '#DeltaR(#Lambda_{c}^{-},#bar{p}) vs #Lambda_{c}^{-} cone multiplicity', '#DeltaR(#Lambda_{c}^{-},#pi^{-}) vs #Lambda_{c}^{-} cone multiplicity', '#DeltaR(#Lambda_{c}^{-},#pi^{+}) vs #Lambda_{c}^{-} cone multiplicity'],
               ['#DeltaR(#Lambda_{c}^{+},p) vs p_{T} #Lambda_{c}^{+}',       '#DeltaR(#Lambda_{c}^{+},#pi^{+}) vs p_{T} #Lambda_{c}^{+}', '#DeltaR(#Lambda_{c}^{+},#pi^{-}) vs p_{T} #Lambda_{c}^{+}',
                '#DeltaR(#Lambda_{c}^{-},#bar{p}) vs p_{T} #Lambda_{c}^{-}', '#DeltaR(#Lambda_{c}^{-},#pi^{-}) vs p_{T} #Lambda_{c}^{-}', '#DeltaR(#Lambda_{c}^{-},#pi^{+}) vs p_{T} #Lambda_{c}^{-}'],
-              ['#Lambda_{c}^{+} cone multiplicity vs p_{T} #Lambda_{c}^{+}', 'Event multiplicity vs p_{T} #Lambda_{c}^{-}', '#Lambda_{c}^{-} cone multiplicity vs p_{T} #Lambda_{c}^{-}', 'Event multiplicity vs p_{T} #Lambda_{c}^{-}']]
+              ['#Lambda_{c}^{+} cone multiplicity vs p_{T} #Lambda_{c}^{+}', 'Event multiplicity vs p_{T} #Lambda_{c}^{+}', '#Lambda_{c}^{-} cone multiplicity vs p_{T} #Lambda_{c}^{-}', 'Event multiplicity vs p_{T} #Lambda_{c}^{-}']]
   nbins_2d_distr: [ [[50,30], [50,30], [50,30], [50,30], [50,30], [50,30]], 
               [[30,30], [30,30], [30,30], [30,30], [30,30], [30,30]],
               [[50,30], [50,30], [50,30], [50,30], [50,30], [50,30]],
@@ -247,6 +262,6 @@ Lc:
             ['# final particles (R<0.7)', '# final particles', '# final particles (R<0.7)', '# final particles']] 
 
   
-  pthad_fileinput: [../input/pThad_Data.csv, ../input/pThad_Data_WithMPI_NoCR.csv, ../input/pThad_Data_WithMPI_MoreQCDBased.csv, ../input/pThad_Data_WithMPI_MPIBased.csv, ../input/pThad_Data_WithMPI_Ropes.csv, ../input/pThad_Data_WithMPI_RopesShoving.csv]
+  pthad_fileinput: [../input/pThad_Data_WithMPI_MPIBased.csv, ../input/pThad_Data_WithMPI_NoCR.csv, ../input/pThad_Data_WithMPI_MoreQCDBased.csv, ../input/pThad_Data_WithMPI_Ropes.csv, ../input/pThad_Data_WithMPI_RopesShoving.csv] #../input/pThad_Data.csv, 
   multi_bins: [0,100,300] 
 

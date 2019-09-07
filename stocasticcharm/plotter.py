@@ -39,9 +39,9 @@ class Plotter:
     species = "analyzer"
     def __init__(self):
         self.cases = ["D0", "Ds", "Lc"]
+        self.labels = ['D^{0}','D_{s}','#Lambda_{c}']
         self.colours = [4,2,1]
         self.infilestr = ["Default", "NoCR", "MoreQCDBased", "MPIBased", "Ropes", "RopesShoving"]
-
     def get_num_objects(self, infile, objclass):
         n_obj = 0
         for key in infile.GetListOfKeys():
@@ -71,6 +71,8 @@ class Plotter:
                 infile.Close()
             for icanv in range(len(histlist[0])):
                 c = TCanvas("c_"+histlist[0][icanv].GetName(),'',600,600)
+                c.SetLeftMargin(0.15)
+                c.SetBottomMargin(0.15)
                 leg = TLegend(.7,.75,.9,.9)
                 temparr = []
                 for i in range(len(histlist)):
@@ -78,11 +80,11 @@ class Plotter:
                 hmax = Find_Hist_Max(temparr)
                 for i in range(len(histlist)):
                     histlist[i][icanv].SetLineColor(self.colours[i])
-                    histlist[i][icanv].SetTitle(histlist[i][icanv].GetTitle()[4:])
+                    histlist[i][icanv].SetTitle(histlist[i][icanv].GetTitle()[7:])
                     histlist[i][icanv].SetYTitle(histlist[i][icanv].GetYaxis().GetTitle() + " (normalised)")
                     norm = histlist[i][icanv].GetEntries()
                     histlist[i][icanv].Scale(1./norm)
-                    leg.AddEntry(histlist[i][icanv], self.cases[i])
+                    leg.AddEntry(histlist[i][icanv], self.labels[i])
                     if i==0 : 
                         histlist[i][icanv].SetMaximum(hmax*1.3)
                         histlist[i][icanv].Draw()
